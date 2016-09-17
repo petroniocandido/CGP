@@ -181,7 +181,7 @@ class ClasseNivel(Entidade):
 	def __repr__(self):
 		return '<Classe/Nivel %r>' % self.classe
 
-class Progressao(db.Model):
+class Progressao(Entidade):
 	id = db.Column(db.Integer, primary_key = True)
 	classenivel_id = db.Column(db.Integer, db.ForeignKey('classesniveis.id'))
 	classenivel = db.relationship('ClasseNivel')
@@ -198,7 +198,7 @@ class Progressao(db.Model):
 		self.pessoa = pessoa
 	
 	
-class Endereco(db.Model):
+class Endereco(Entidade):
 	__tablename__ = 'enderecos'
 	id = db.Column(db.Integer, primary_key = True)
 	logradouro  = db.Column(db.String(200))
@@ -224,7 +224,7 @@ class Endereco(db.Model):
 		self.cep = cep
 		self.pessoa = pessoa
 	
-class Telefone(db.Model):
+class Telefone(Entidade):
 	__tablename__ = 'telefones'
 	id = db.Column(db.Integer, primary_key = True)
 	ddd = db.Column(db.String(2))
@@ -246,7 +246,7 @@ class Telefone(db.Model):
 		self.prestadora = prestadora
 
 	
-class Cargo(db.Model):
+class Cargo(Entidade):
 	__tablename__ = 'cargos'
 	id = db.Column(db.Integer, primary_key = True)
 	cargo  = db.Column(db.String(200))
@@ -262,7 +262,7 @@ class Cargo(db.Model):
 	pessoa = db.relationship('Pessoa',  backref=db.backref('enderecos', lazy='dynamic'))
 	
 	
-class Funcao(db.Model):
+class Funcao(Entidade):
 	__tablename__ = 'funcoes'
 	id = db.Column(db.Integer, primary_key = True)
 	sigla = db.Column(db.String(120), unique=True)
@@ -284,7 +284,7 @@ class Funcao(db.Model):
 		self.atividade = atividade
 
 	
-class Campus(db.Model):
+class Campus(Entidade):
 	__tablename__ = 'campus'
 	id = db.Column(db.Integer, primary_key = True)
 	sigla = db.Column(db.String(120), unique=True)
@@ -295,7 +295,7 @@ class Campus(db.Model):
 		self.nome = nome
 
 
-class Setor(db.Model):
+class Setor(Entidade):
 	__tablename__ = 'setores'
 	id = db.Column(db.Integer, primary_key = True)
 	sigla = db.Column(db.String(120), unique=True)
@@ -309,7 +309,7 @@ class Setor(db.Model):
 		return '<Setor %r>' % self.nome
 
 		
-class Titulo(db.Model):
+class Titulo(Entidade):
 	__tablename__ = 'titulos'
 	id = db.Column(db.Integer, primary_key = True)
 	titulo = db.Column(db.String(20))
