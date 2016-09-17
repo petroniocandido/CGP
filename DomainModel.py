@@ -3,6 +3,7 @@
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.ext.declarative import declared_attr
 import enum
 
 app = Flask(__name__)
@@ -84,8 +85,32 @@ class UF(enum.Enum):
 	SE = "SE"
 	SP = "SP"
 	TO = "TO"
+	
+# Define a base model for other database tables to inherit
+class Entidade(db.Model):
+	
+	__abstract__  = True
+	id = db.Column(db.Integer, primary_key=True)
+	dataCriacao  = db.Column(db.DateTime, default=db.func.current_timestamp(),nullable=False)
+	dataUltimaModificacao = db.Column(db.DateTime,  default=db.func.current_timestamp(), onupdate=db.func.current_timestamp(),nullable=False)
+	
+	@declared_attr
+	def usuarioCriacao_id(cls): 
+		return db.Column(db.Integer, db.ForeignKey('pessoas.id'))
+	
+	@declared_attr
+	def usuarioCriacao(cls): 
+		return db.relationship('Pessoa')
+	
+	@declared_attr
+	def usuarioUltimaModificacao_id(cls): 
+		return db.Column(db.Integer, db.ForeignKey('pessoas.id'))
+		
+	@declared_attr
+	def usuarioUltimaModificacao(cls): 
+		return db.relationship('Pessoa')
 
-class Pessoa(db.Model):
+class Pessoa(Entidade):
 	__tablename__ = 'pessoas'
 	id = db.Column(db.Integer, primary_key = True)
 	nome = db.Column(db.String(200), nullable=False)
@@ -143,7 +168,7 @@ class Pessoa(db.Model):
 	def __repr__(self):
 		return '<Pessoa %r>' % self.nome
 			
-class ClasseNivel(db.Model):
+class ClasseNivel(Entidade):
 	__tablename__ = 'classesniveis'
 	id = db.Column(db.Integer, primary_key = True)
 	classe = db.Column(db.String(5))
