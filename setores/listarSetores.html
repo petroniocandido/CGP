@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h3>Listagem de Servidores</h3>
+<div class="col-md-6">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>NOME</th>
+                <th>SIAPE</th>
+                <th>TIPO</th>
+                <th>EDITAR</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Petrônio Cândido de Lima e Silva</td>
+                <td>01085679</td>
+                <td>Professor EBTT</td>
+                <td> <a href="/pessoas/editar/">Editar</a> </td>
+              </tr>
+              
+            </tbody>
+          </table>
+        </div>
+  
+{% endblock %}
