@@ -1,27 +1,28 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<h3>Listagem de Setores</h3>
 <div class="col-md-6">
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th>NOME</th>
-                <th>SIAPE</th>
-                <th>TIPO</th>
-                <th>EDITAR</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Petrônio Cândido de Lima e Silva</td>
-                <td>01085679</td>
-                <td>Professor EBTT</td>
-                <td> <a href="/pessoas/editar/">Editar</a> </td>
-              </tr>
-              
-            </tbody>
-          </table>
-        </div>
+<h3>Listagem de Setores</h3>
+
+  <table class="table table-striped">
+	<thead>
+	  <tr>
+		<th>SIGLA</th>
+		<th>SETOR</th>
+		<th>EDITAR</th>
+	  </tr>
+	</thead>
+	<tbody>
+	  <tr>
+		{% for setor in setores %}
+		<td>{{ setor.sigla }}</td>
+		<td>{{ setor.nome }}</td>
+		<td> <a href="/setores/editar/{{ setor.id }}">Editar</a> </td>
+		{% endfor %}
+	  </tr>              
+	</tbody>
+  </table>
+  <a href="/setores/editar/">Novo</a>
+</div>
   
 {% endblock %}

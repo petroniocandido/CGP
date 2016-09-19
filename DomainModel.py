@@ -94,25 +94,25 @@ class Entidade(db.Model):
 	dataCriacao  = db.Column(db.DateTime, default=db.func.current_timestamp(),nullable=False)
 	dataUltimaModificacao = db.Column(db.DateTime,  default=db.func.current_timestamp(), onupdate=db.func.current_timestamp(),nullable=False)
 	
-	@declared_attr
-	def usuarioCriacao_id(cls): 
-		return db.Column(db.Integer, db.ForeignKey('pessoas.id'))
+	#@declared_attr
+	#def usuarioCriacao_id(cls): 
+	#	return db.Column(db.Integer, db.ForeignKey('pessoas.id'))
 	
-	@declared_attr
-	def usuarioCriacao(cls): 
-		return db.relationship('Pessoa')
-	
-	@declared_attr
-	def usuarioUltimaModificacao_id(cls): 
-		return db.Column(db.Integer, db.ForeignKey('pessoas.id'))
+	#@declared_attr
+	#def usuarioCriacao(cls): 
+	#	return db.relationship('Pessoa', foreign_keys=[usuarioCriacao_id])
 		
-	@declared_attr
-	def usuarioUltimaModificacao(cls): 
-		return db.relationship('Pessoa')
+	#@declared_attr
+	#def usuarioUltimaModificacao_id(cls): 
+	#	return db.Column(db.Integer, db.ForeignKey('pessoas.id'))
+		
+	#@declared_attr
+	#def usuarioUltimaModificacao(cls): 
+	#	return db.relationship('Pessoa', foreign_keys=[usuarioUltimaModificacao_id])
 
 class Pessoa(Entidade):
 	__tablename__ = 'pessoas'
-	id = db.Column(db.Integer, primary_key = True)
+	#id = db.Column(db.Integer, primary_key = True)
 	nome = db.Column(db.String(200), nullable=False)
 	matricula = db.Column(db.String(12), unique=True)
 	matriculaOrigem  = db.Column(db.String(12), unique=True)
@@ -133,8 +133,8 @@ class Pessoa(Entidade):
 	possuiDeficiencia = db.Column(db.Boolean)
 	TipoDeficiencia = db.Column(db.String(200))
 	raca_cor = db.Column(db.String(200))
-	enderecos = db.relationship("Endereco", back_populates="pessoas")
-	telefones = db.relationship("Telefone", back_populates="pessoas")
+	enderecos = db.relationship("Endereco", backref="pessoa")
+	telefones = db.relationship("Telefone", backref="pessoa")
 	email_Pessoal = db.Column(db.String(120), unique=True)
 	email_Institucional = db.Column(db.String(120), unique=True)
 	curriculumLattes = db.Column(db.String(120), unique=True)
@@ -157,10 +157,10 @@ class Pessoa(Entidade):
 	pagamento_Agencia = db.Column(db.String(12))
 	pagamento_Conta = db.Column(db.String(12))
 	pagamento_TipoConta = db.Column(db.String(2))
-	cargos = db.relationship("Cargo", back_populates="pessoas")
-	funcoes = db.relationship("Funcao", back_populates="pessoas")
-	titulos = db.relationship("Titulos", back_populates="pessoas")
-	progressoes = db.relationship("Progressao", back_populates="pessoas")
+	cargos = db.relationship("Cargo", backref="pessoa")
+	funcoes = db.relationship("Funcao", backref="pessoa")
+	titulos = db.relationship("Titulo", backref="pessoa")
+	progressoes = db.relationship("Progressao", backref="pessoa")
 	
 	jornada = db.Column(db.String(2))
 	
@@ -189,7 +189,7 @@ class Progressao(Entidade):
 	dataTermino = db.Column(db.DateTime)
 	
 	pessoa_id = db.Column(db.Integer, db.ForeignKey('pessoas.id'))
-	pessoa = db.relationship('Pessoa',  backref=db.backref('progressoes', lazy='dynamic'))
+	#pessoa = db.relationship('Pessoa',  backref=db.backref('progressoes_fk', lazy='dynamic'))
 
 	def __init__(self,classenivel,dataInicio,dataTermino,pessoa):
 		self.classenivel = classenivel
@@ -211,7 +211,7 @@ class Endereco(Entidade):
 	cep = db.Column(db.String(10))
 	
 	pessoa_id = db.Column(db.Integer, db.ForeignKey('pessoas.id'))
-	pessoa = db.relationship('Pessoa',  backref=db.backref('enderecos', lazy='dynamic'))
+	#pessoa = db.relationship('Pessoa',  backref='enderecos_fk')
 	
 	def __init__(self,logradouro, numero, complemento, bairro, municipio, pais, estado, cep, pessoa):
 		self.logradouro = logradouro
@@ -235,7 +235,7 @@ class Telefone(Entidade):
 	prestadora = db.Column(db.String(12))
 	
 	pessoa_id = db.Column(db.Integer, db.ForeignKey('pessoas.id'))
-	pessoa = db.relationship('Pessoa',  backref=db.backref('enderecos', lazy='dynamic'))
+	#pessoa = db.relationship('Pessoa',  backref=db.backref('telefones_fk', lazy='dynamic'))
 	
 	def __init__(self, ddd, numero, ramal, fixo, celular, prestadora):
 		self.ddd = ddd
@@ -259,7 +259,7 @@ class Cargo(Entidade):
 	exercicio = db.Column(db.DateTime)
 	
 	pessoa_id = db.Column(db.Integer, db.ForeignKey('pessoas.id'))
-	pessoa = db.relationship('Pessoa',  backref=db.backref('enderecos', lazy='dynamic'))
+	#pessoa = db.relationship('Pessoa',  backref=db.backref('cargos_fk', lazy='dynamic'))
 	
 	
 class Funcao(Entidade):
@@ -273,7 +273,7 @@ class Funcao(Entidade):
 	atividade = db.Column(db.String(120), unique=True)
 	
 	pessoa_id = db.Column(db.Integer, db.ForeignKey('pessoas.id'))
-	pessoa = db.relationship('Pessoa',  backref=db.backref('enderecos', lazy='dynamic'))
+	#pessoa = db.relationship('Pessoa',  backref=db.backref('funcoes_fk', lazy='dynamic'))
 	
 	def __init__(self, sigla, codigo, nome, dataIngresso, dataSaida, atividade):
 		self.sigla = sigla
@@ -300,6 +300,10 @@ class Setor(Entidade):
 	id = db.Column(db.Integer, primary_key = True)
 	sigla = db.Column(db.String(120), unique=True)
 	nome = db.Column(db.String(120), unique=True)
+	telefone = db.Column(db.String(12))
+	
+	campus_id = db.Column(db.Integer, db.ForeignKey('campus.id'))
+	campus = db.relationship('Campus')
 	
 	def __init__(self, sigla, nome):
 		self.sigla = sigla
@@ -319,7 +323,7 @@ class Titulo(Entidade):
 	dataTermino = db.Column(db.DateTime)
 	
 	pessoa_id = db.Column(db.Integer, db.ForeignKey('pessoas.id'))
-	pessoa = db.relationship('Pessoa',  backref=db.backref('titulos', lazy='dynamic'))
+	#pessoa = db.relationship('Pessoa',  backref=db.backref('titulos_fk', lazy='dynamic'))
 	
 	def __init__(self, titulo, area, instituicao, dataInicio, dataTermino, pessoa):
 		self.titulo = titulo
