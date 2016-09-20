@@ -13,16 +13,16 @@
 	  </tr>
 	</thead>
 	<tbody>
+	  {% for setor in setores %}
 	  <tr>
-		{% for setor in setores %}
 		<td>{{ setor.sigla }}</td>
 		<td>{{ setor.nome }}</td>
 		<td> <a href="/setores/editar/{{ setor.id }}">Editar</a> </td>
-		{% endfor %}
-	  </tr>              
+	  </tr>
+	  {% endfor %}              
 	</tbody>
   </table>
-  <a href="/setores/editar/">Novo</a>
+  <a href="/setores/editar/0">Novo</a>
 </div>
   
 {% endblock %}

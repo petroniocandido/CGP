@@ -110,9 +110,9 @@ class Entidade(db.Model):
 	#def usuarioUltimaModificacao(cls): 
 	#	return db.relationship('Pessoa', foreign_keys=[usuarioUltimaModificacao_id])
 
-class Pessoa(Entidade):
+class Pessoa(db.Model):
 	__tablename__ = 'pessoas'
-	#id = db.Column(db.Integer, primary_key = True)
+	id = db.Column(db.Integer, primary_key = True)
 	nome = db.Column(db.String(200), nullable=False)
 	matricula = db.Column(db.String(12), unique=True)
 	matriculaOrigem  = db.Column(db.String(12), unique=True)
@@ -161,14 +161,21 @@ class Pessoa(Entidade):
 	funcoes = db.relationship("Funcao", backref="pessoa")
 	titulos = db.relationship("Titulo", backref="pessoa")
 	progressoes = db.relationship("Progressao", backref="pessoa")
+	tipo_id = db.Column(db.Integer, db.ForeignKey('pessoastipos.id'))
+	tipo = db.relationship('PessoaTipo')
 	
 	jornada = db.Column(db.String(2))
 	
 		
 	def __repr__(self):
 		return '<Pessoa %r>' % self.nome
+		
+class PessoasTipos(db.Model):
+	__tablename__ = 'pessoastipos'
+	id = db.Column(db.Integer, primary_key = True)
+	descricao = db.Column(db.String(50))
 			
-class ClasseNivel(Entidade):
+class ClasseNivel(db.Model):
 	__tablename__ = 'classesniveis'
 	id = db.Column(db.Integer, primary_key = True)
 	classe = db.Column(db.String(5))
@@ -181,7 +188,7 @@ class ClasseNivel(Entidade):
 	def __repr__(self):
 		return '<Classe/Nivel %r>' % self.classe
 
-class Progressao(Entidade):
+class Progressao(db.Model):
 	id = db.Column(db.Integer, primary_key = True)
 	classenivel_id = db.Column(db.Integer, db.ForeignKey('classesniveis.id'))
 	classenivel = db.relationship('ClasseNivel')
@@ -198,7 +205,7 @@ class Progressao(Entidade):
 		self.pessoa = pessoa
 	
 	
-class Endereco(Entidade):
+class Endereco(db.Model):
 	__tablename__ = 'enderecos'
 	id = db.Column(db.Integer, primary_key = True)
 	logradouro  = db.Column(db.String(200))
@@ -224,7 +231,7 @@ class Endereco(Entidade):
 		self.cep = cep
 		self.pessoa = pessoa
 	
-class Telefone(Entidade):
+class Telefone(db.Model):
 	__tablename__ = 'telefones'
 	id = db.Column(db.Integer, primary_key = True)
 	ddd = db.Column(db.String(2))
@@ -246,7 +253,7 @@ class Telefone(Entidade):
 		self.prestadora = prestadora
 
 	
-class Cargo(Entidade):
+class Cargo(db.Model):
 	__tablename__ = 'cargos'
 	id = db.Column(db.Integer, primary_key = True)
 	cargo  = db.Column(db.String(200))
@@ -262,7 +269,7 @@ class Cargo(Entidade):
 	#pessoa = db.relationship('Pessoa',  backref=db.backref('cargos_fk', lazy='dynamic'))
 	
 	
-class Funcao(Entidade):
+class Funcao(db.Model):
 	__tablename__ = 'funcoes'
 	id = db.Column(db.Integer, primary_key = True)
 	sigla = db.Column(db.String(120), unique=True)
@@ -284,7 +291,7 @@ class Funcao(Entidade):
 		self.atividade = atividade
 
 	
-class Campus(Entidade):
+class Campus(db.Model):
 	__tablename__ = 'campus'
 	id = db.Column(db.Integer, primary_key = True)
 	sigla = db.Column(db.String(120), unique=True)
@@ -295,7 +302,7 @@ class Campus(Entidade):
 		self.nome = nome
 
 
-class Setor(Entidade):
+class Setor(db.Model):
 	__tablename__ = 'setores'
 	id = db.Column(db.Integer, primary_key = True)
 	sigla = db.Column(db.String(120), unique=True)
@@ -305,15 +312,11 @@ class Setor(Entidade):
 	campus_id = db.Column(db.Integer, db.ForeignKey('campus.id'))
 	campus = db.relationship('Campus')
 	
-	def __init__(self, sigla, nome):
-		self.sigla = sigla
-		self.nome = nome
-
 	def __repr__(self):
 		return '<Setor %r>' % self.nome
 
 		
-class Titulo(Entidade):
+class Titulo(db.Model):
 	__tablename__ = 'titulos'
 	id = db.Column(db.Integer, primary_key = True)
 	titulo = db.Column(db.String(20))

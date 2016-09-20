@@ -1,5 +1,7 @@
 {% extends "layoutForm.html" %}
 {% from "_formhelpers.html" import render_field %}
+{% block action %}{{form.id.data}}{% endblock %}
+
 {% block formulario %}
 
 <h3>Editar Setor</h3>
@@ -13,6 +15,7 @@
   
   <div id="geral" class="tab-pane fade in active">
     <dl>
+	{{ render_field(form.id) }}
     {{ render_field(form.sigla) }}
     {{ render_field(form.nome) }}
     {{ render_field(form.telefone) }}
