@@ -2,6 +2,8 @@ from flask import Flask, render_template
 
 app = Flask(__name__)
 
+app.config['SECRET_KEY'] = "1!aA2@sS3#dD4$fF5%gG"
+
 from pessoas.controller import pessoas
 from setores.controller import setores
 

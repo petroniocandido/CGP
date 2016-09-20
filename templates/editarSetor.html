@@ -1,5 +1,6 @@
-{% extends "layout.html" %}
-{% block content %}
+{% extends "layoutForm.html" %}
+{% from "_formhelpers.html" import render_field %}
+{% block formulario %}
 
 <h3>Editar Setor</h3>
 
@@ -11,25 +12,18 @@
 <div class="tab-content">
   
   <div id="geral" class="tab-pane fade in active">
-    <h3>Dados Pessoais</h3>
-    <p>Some content.</p>
+    <dl>
+    {{ render_field(form.sigla) }}
+    {{ render_field(form.nome) }}
+    {{ render_field(form.telefone) }}
+    </dl>
   </div>
   
-  <div id="funcionais" class="tab-pane fade">
-    <h3>Dados Funcionais</h3>
-    <p>Some content in menu 1.</p>
+  <div id="auditoria" class="tab-pane fade">
+    
   </div>
   
-  <div id="progressoes" class="tab-pane fade">
-    <h3>Progressões</h3>
-    <p>Some content in menu 2.</p>
-  </div>
-  
-  <div id="ferias" class="tab-pane fade">
-    <h3>Férias</h3>
-    <p>Some content in menu 2.</p>
-  </div>
+  <input type="submit" value="Salvar" />
+
 </div>
-
-
 {% endblock %}
