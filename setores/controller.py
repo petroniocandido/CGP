@@ -1,10 +1,10 @@
 from flask import Flask, render_template, request, flash
 from flask import Blueprint
 from flask_wtf import Form
-from wtforms import StringField,HiddenField
+from wtforms import StringField,HiddenField,SelectField
 from wtforms.validators import DataRequired
 
-from DomainModel import db,Setor
+from DomainModel import db,Setor,Campus
 
 setores = Blueprint('setores', __name__)
 
@@ -13,6 +13,7 @@ class SetorForm(Form):
 	sigla = StringField('Sigla', validators=[DataRequired()])
 	nome = StringField('Setor', validators=[DataRequired()])
 	telefone = StringField('Telefone')
+	campus_id = SelectField('Campus', coerce=int, choices=[(c.id, c.sigla) for c in Campus.query.order_by('sigla')])
 	
 @setores.route('/listar/')
 def setoresListar():
@@ -30,6 +31,7 @@ def setorEditar(id=0):
 	
 	if request.method == 'POST':
 		form = SetorForm(formdata=request.form)
+		#form.campus_id.choices = 
 		
 		if form.validate():
 			form.populate_obj(setor)
@@ -38,6 +40,9 @@ def setorEditar(id=0):
 			flash('New entry was successfully posted') 
 	else:
 		form = SetorForm(obj=setor)
+		#form.campus_id.choices = [(c.id, c.sigla) for c in Campus.query.order_by('sigla')]
+		
+	
 		
 		
 	return render_template('editarSetor.html',form=form)
