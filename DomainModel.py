@@ -296,11 +296,7 @@ class Campus(db.Model):
 	id = db.Column(db.Integer, primary_key = True)
 	sigla = db.Column(db.String(120), unique=True)
 	nome = db.Column(db.String(120), unique=True)
-	
-	def __init__(self, sigla, nome):
-		self.sigla = sigla
-		self.nome = nome
-
+		
 
 class Setor(db.Model):
 	__tablename__ = 'setores'

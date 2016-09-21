@@ -4,9 +4,8 @@
 
 {% block formulario %}
 
-<h3>Editar Setor</h3>
+<h3>Editar Campus</h3>
 {{ render_hidden(form.id) }}
-
 <ul class="nav nav-tabs">
   <li class="active"><a data-toggle="tab" href="#geral">Geral</a></li>
   <li><a data-toggle="tab" href="#auditoria">Auditoria</a></li>
@@ -19,7 +18,6 @@
 	{{ render_label(form.id) }}
     {{ render_field(form.sigla) }}
     {{ render_field(form.nome) }}
-    {{ render_field(form.telefone) }}
     </dl>
   </div>
   
@@ -27,7 +25,7 @@
     
   </div>
   
-{{ botoes_entidade("setores",form.id.data) }}
+{{ botoes_entidade("campus",form.id.data) }}
 
 </div>
 {% endblock %}
