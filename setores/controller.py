@@ -42,9 +42,12 @@ def setorEditar(id=0):
 		
 	return render_template('editarSetor.html',form=form)
 	
-@setores.route('/remover/<int:id>',methods=('POST'))
+@setores.route('/remover/<int:id>',methods=('GET','POST'))
 def setorRemover(id):
-	db.session.delete(obj)
+	setor = Setor.query.filter(Setor.id == id).first()
+	db.session.delete(setor)
 	db.session.commit()
-	return setoresListar()
+	#return setoresListar()
+	setores = Setor.query.all()
+	return render_template('listarSetores.html',setores = setores)
 	

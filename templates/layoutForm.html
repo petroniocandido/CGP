@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
 
- <form method="POST" action="{% block action %} {% endblock %}" accept-charset="UTF-8" role="form">
+ <form id="mainform" method="POST" action="{% block action %} {% endblock %}" accept-charset="UTF-8" role="form">
     {{ form.csrf_token }}
       
     {% block formulario %}

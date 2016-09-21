@@ -170,7 +170,7 @@ class Pessoa(db.Model):
 	def __repr__(self):
 		return '<Pessoa %r>' % self.nome
 		
-class PessoasTipos(db.Model):
+class PessoaTipo(db.Model):
 	__tablename__ = 'pessoastipos'
 	id = db.Column(db.Integer, primary_key = True)
 	descricao = db.Column(db.String(50))
