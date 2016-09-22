@@ -24,7 +24,8 @@
     <![endif]-->
   </head>
   <body>
-	  
+
+
 	  <!-- Fixed navbar -->
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
@@ -45,6 +46,7 @@
               <ul class="dropdown-menu">
                 <li><a href="/campus/listar">Campus</a></li>
                 <li><a href="/setores/listar/">Setores</a></li>
+                <li><a href="/classenivel/listar/">Classes e Níveis</a></li>
                 <li><a href="#">Cargos</a></li>
                 <li><a href="#">Funções</a></li>
               </ul>
@@ -61,12 +63,30 @@
         </div><!--/.nav-collapse -->
       </div>
     </nav>
-	  
-	<div class="container">
+
+	<div class="container theme-showcase" role="main">	
+	
+	<div class="page-header">
+		<h2></h2>
+	</div>
+		
+	<div class="page-header">
+		<h2>{% block titulo %}{% endblock %}</h2>
+	</div>
+	
+	{% with messages = get_flashed_messages(with_categories=true) %}
+		{% if messages %}      
+		{% for category, message in messages %}
+		<div class="alert alert-{{category}}" role="alert">
+			<button type="button" class="close" data-dismiss="alert">&times;</button> {{ message }}
+		</div>
+		{% endfor %}
+		{% endif %}
+		{% endwith %}
+		
     {% block content %}
     {% endblock %}
-    </div>
-
+    
     <!-- jQuery (obrigatório para plugins JavaScript do Bootstrap) -->	
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Inclui todos os plugins compilados (abaixo), ou inclua arquivos separadados se necessário -->

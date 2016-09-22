@@ -1,10 +1,13 @@
+#!/usr/bin/python
+# -*- coding: utf8 -*-
+
 from flask import Flask, render_template, request, flash
 from flask import Blueprint
 from flask_wtf import Form
 from wtforms import StringField,HiddenField
 from wtforms.validators import DataRequired
 
-from DomainModel import db,Campus
+from DomainModel import db,Campus,Salvar,Remover
 
 campus = Blueprint('campus', __name__)
 
@@ -32,9 +35,10 @@ def CampusEditar(id=0):
 		
 		if form.validate():
 			form.populate_obj(campus)
-			db.session.add(campus)
-			db.session.commit()
-			flash('New entry was successfully posted') 
+			if Salvar(campus):
+				flash('Salvo com sucesso!','success')
+			else: 
+				flash('Falha ao salvar!','danger')
 	else:
 		form = CampusForm(obj=campus)
 		
@@ -44,8 +48,10 @@ def CampusEditar(id=0):
 @campus.route('/remover/<int:id>',methods=('GET','POST'))
 def CampusRemover(id):
 	campus = Campus.query.filter(Campus.id == id).first()
-	db.session.delete(campus)
-	db.session.commit()
+	if Remover(campus):
+		flash('Removido com sucesso!','success')
+	else: 
+		flash('Falha ao remover!','danger')
 	campi = Campus.query.all()
 	return render_template('listarCampus.html',listagem = campi)
 	

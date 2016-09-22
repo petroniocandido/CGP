@@ -1,10 +1,13 @@
+#!/usr/bin/python
+# -*- coding: utf8 -*-
+
 from flask import Flask, render_template, request, flash
 from flask import Blueprint
 from flask_wtf import Form
 from wtforms import StringField,HiddenField,SelectField
 from wtforms.validators import DataRequired
 
-from DomainModel import db,Setor,Campus
+from DomainModel import db,Setor,Campus,Salvar,Remover
 
 setores = Blueprint('setores', __name__)
 
@@ -18,7 +21,7 @@ class SetorForm(Form):
 @setores.route('/listar/')
 def setoresListar():
 	setores = Setor.query.all()
-	return render_template('listarSetores.html',setores = setores)
+	return render_template('listarSetores.html',listagem = setores)
   
 @setores.route('/editar/<int:id>',methods=('GET','POST'))
 def setorEditar(id=0):
@@ -31,28 +34,25 @@ def setorEditar(id=0):
 	
 	if request.method == 'POST':
 		form = SetorForm(formdata=request.form)
-		#form.campus_id.choices = 
 		
 		if form.validate():
 			form.populate_obj(setor)
-			db.session.add(setor)
-			db.session.commit()
-			flash('New entry was successfully posted') 
+			if Salvar(setor):
+				flash('Salvo com sucesso!','success')
+			else: 
+				flash('Falha ao salvar!','danger')
 	else:
 		form = SetorForm(obj=setor)
-		#form.campus_id.choices = [(c.id, c.sigla) for c in Campus.query.order_by('sigla')]
-		
-	
-		
 		
 	return render_template('editarSetor.html',form=form)
 	
 @setores.route('/remover/<int:id>',methods=('GET','POST'))
 def setorRemover(id):
 	setor = Setor.query.filter(Setor.id == id).first()
-	db.session.delete(setor)
-	db.session.commit()
-	#return setoresListar()
+	if Remover(setor):
+		flash('Removido com sucesso!','success')
+	else: 
+		flash('Falha ao remover!','danger')
 	setores = Setor.query.all()
-	return render_template('listarSetores.html',setores = setores)
+	return render_template('listarSetores.html',listagem = setores)
 	

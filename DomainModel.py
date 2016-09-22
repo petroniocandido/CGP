@@ -11,36 +11,62 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:root@localhost/CGP'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
 
+def Salvar(obj):
+	try:
+		db.session.add(obj)
+		db.session.commit()
+		return True
+	except Exception as inst:
+		print(inst)
+		db.session.rollback()
+		return False
+		
+def Remover(obj):
+	try:
+		db.session.delete(obj)
+		db.session.commit()
+		return True
+	except Exception as inst:
+		print(inst)
+		db.session.rollback()
+		return False
+
 class TipoServidor(enum.Enum):
-	TAE = "Técnico-Administrativo"
-	DOC = "Docente"
+	DE = "Docente Efetivo"
+	DT = "Docente Temporário"
+	TE = "Técnico-Administrativo Efetivo"
+	TT = "Técnico-Administrativo Temporário"
+	
+class ClasseCargoFuncao(enum.Enum):
+	FG = "Função Gratificada"
+	CD = "Cargo de Direção"	
 	
 class SituacaoServidor(enum.Enum):
-	Ativo = "1"
-	Pensionista = "2"
+	Ativo = 1
+	Pensionista = 2
 
 class Titulacao(enum.Enum):
-	EnsinoBasico = "Ensino Básico e Fundamental"
-	Tecnico = "Técnico"
-	Tecnologo = "Ensino Superior - Tecnologia"
-	Bacharel = "Ensino Superior - Bacharelado"
-	Licenciado = "Ensino Superior - Licenciatura"
-	Especialista = "Pós-Graduação Latu Sensu - Especialização/MBA"
-	Mestre = "Pós-Graduação Strictu Sensu - Mestrado"
-	Doutor = "Pós-Graduação Strictu Sensu - Doutorado"
+	EBA = "Ensino Básico e Fundamental"
+	TEC = "Técnico"
+	TLG = "Ensino Superior - Tecnologia"
+	BAC = "Ensino Superior - Bacharelado"
+	LIC = "Ensino Superior - Licenciatura"
+	ESP = "Pós-Graduação Latu Sensu - Especialização/MBA"
+	MES = "Pós-Graduação Strictu Sensu - Mestrado"
+	DOC = "Pós-Graduação Strictu Sensu - Doutorado"
 
 
 class TipoContaBancaria(enum.Enum):
-	ContaCorrente = "Conta Corrente"
-	ContaPoupanca = "Conta Poupança"
+	CC = "Conta Corrente"
+	CP = "Conta Poupança"
 
 class Sexo(enum.Enum):
 	M = "Masculino"
-	F = "Fminino"
+	F = "Feminino"
 
 class EstadoCivil(enum.Enum):
-	Solteiro = "Solteiro(a)"
-	Casado = "Casado(a)"
+	S = "Solteiro"
+	C = "Casado"
 
 class TipoSanguineo(enum.Enum):
 	an = "A-"
@@ -117,11 +143,11 @@ class Pessoa(db.Model):
 	matricula = db.Column(db.String(12), unique=True)
 	matriculaOrigem  = db.Column(db.String(12), unique=True)
 	identificacaoUnica = db.Column(db.String(12), unique=True)
-	tipoServidor = db.Column(db.String(2))
+	tipoServidor = db.Column(db.String(2)) 
 	situacaoServidor = db.Column(db.String(1))
 	dataCadastroSiape = db.Column(db.DateTime)
 	dataNascimento = db.Column(db.DateTime)
-	estadoCivil  = db.Column(db.String(10))
+	estadoCivil  = db.Column(db.String(2))
 	dataPrimeiroEmprego = db.Column(db.DateTime)
 	nacionalidade = db.Column(db.String(200))
 	ufNascimento  = db.Column(db.String(2))
@@ -157,33 +183,23 @@ class Pessoa(db.Model):
 	pagamento_Agencia = db.Column(db.String(12))
 	pagamento_Conta = db.Column(db.String(12))
 	pagamento_TipoConta = db.Column(db.String(2))
-	cargos = db.relationship("Cargo", backref="pessoa")
-	funcoes = db.relationship("Funcao", backref="pessoa")
+#	cargos = db.relationship("Cargo", backref="pessoa")
+#	funcoes = db.relationship("Funcao", backref="pessoa")
 	titulos = db.relationship("Titulo", backref="pessoa")
 	progressoes = db.relationship("Progressao", backref="pessoa")
-	tipo_id = db.Column(db.Integer, db.ForeignKey('pessoastipos.id'))
-	tipo = db.relationship('PessoaTipo')
 	
 	jornada = db.Column(db.String(2))
 	
 		
 	def __repr__(self):
 		return '<Pessoa %r>' % self.nome
-		
-class PessoaTipo(db.Model):
-	__tablename__ = 'pessoastipos'
-	id = db.Column(db.Integer, primary_key = True)
-	descricao = db.Column(db.String(50))
-			
+				
 class ClasseNivel(db.Model):
 	__tablename__ = 'classesniveis'
 	id = db.Column(db.Integer, primary_key = True)
-	classe = db.Column(db.String(5))
-	nivel = db.Column(db.Integer)
-	
-	def __init__(self,classe,nivel):
-		self.classe = classe
-		self.nivel = nivel
+	tipoServidor = db.Column(db.String(2))
+	classe = db.Column(db.String(10))
+	nivel = db.Column(db.String(5))
 	
 	def __repr__(self):
 		return '<Classe/Nivel %r>' % self.classe
@@ -196,13 +212,6 @@ class Progressao(db.Model):
 	dataTermino = db.Column(db.DateTime)
 	
 	pessoa_id = db.Column(db.Integer, db.ForeignKey('pessoas.id'))
-	#pessoa = db.relationship('Pessoa',  backref=db.backref('progressoes_fk', lazy='dynamic'))
-
-	def __init__(self,classenivel,dataInicio,dataTermino,pessoa):
-		self.classenivel = classenivel
-		self.dataInicio = dataInicio
-		self.dataTermino = dataTermino
-		self.pessoa = pessoa
 	
 	
 class Endereco(db.Model):
@@ -220,16 +229,6 @@ class Endereco(db.Model):
 	pessoa_id = db.Column(db.Integer, db.ForeignKey('pessoas.id'))
 	#pessoa = db.relationship('Pessoa',  backref='enderecos_fk')
 	
-	def __init__(self,logradouro, numero, complemento, bairro, municipio, pais, estado, cep, pessoa):
-		self.logradouro = logradouro
-		self.numero = numero
-		self.complemento = complemento
-		self.bairro = bairro
-		self.municipio = municipio
-		self.pais = pais
-		self.estado = estado
-		self.cep = cep
-		self.pessoa = pessoa
 	
 class Telefone(db.Model):
 	__tablename__ = 'telefones'
@@ -242,54 +241,44 @@ class Telefone(db.Model):
 	prestadora = db.Column(db.String(12))
 	
 	pessoa_id = db.Column(db.Integer, db.ForeignKey('pessoas.id'))
-	#pessoa = db.relationship('Pessoa',  backref=db.backref('telefones_fk', lazy='dynamic'))
-	
-	def __init__(self, ddd, numero, ramal, fixo, celular, prestadora):
-		self.ddd = ddd
-		self.numero = numero
-		self.ramal = ramal
-		self.fixo = fixo
-		self.celular = celular
-		self.prestadora = prestadora
 
+#class Cargo(db.Model):	
+#	__tablename__ = 'pessoascargos'
+#	id = db.Column(db.Integer, primary_key = True)
 	
-class Cargo(db.Model):
-	__tablename__ = 'cargos'
-	id = db.Column(db.Integer, primary_key = True)
-	cargo  = db.Column(db.String(200))
-	classe   = db.Column(db.String(200))
-	padrao   = db.Column(db.String(200))
-	dataPosse = db.Column(db.DateTime)
-	dataSaida = db.Column(db.DateTime)
-	codigoVaga  = db.Column(db.String(200))
-	ingresso = db.Column(db.DateTime)
-	exercicio = db.Column(db.DateTime)
 	
-	pessoa_id = db.Column(db.Integer, db.ForeignKey('pessoas.id'))
+	
+#class PessoaCargo(db.Model):
+#	__tablename__ = 'pessoascargos'
+#	id = db.Column(db.Integer, primary_key = True)
+#	cargo  = db.Column(db.String(200))		
+#	codigoVaga  = db.Column(db.String(200))
+	
+#	padrao   = db.Column(db.String(200))
+#	dataPosse = db.Column(db.DateTime)
+#	dataSaida = db.Column(db.DateTime)
+	
+#	ingresso = db.Column(db.DateTime)
+#	exercicio = db.Column(db.DateTime)
+	
+#	pessoa_id = db.Column(db.Integer, db.ForeignKey('pessoas.id'))
 	#pessoa = db.relationship('Pessoa',  backref=db.backref('cargos_fk', lazy='dynamic'))
-	
-	
-class Funcao(db.Model):
-	__tablename__ = 'funcoes'
-	id = db.Column(db.Integer, primary_key = True)
-	sigla = db.Column(db.String(120), unique=True)
-	codigo = db.Column(db.String(120), unique=True)
-	nome = db.Column(db.String(120), unique=True)
-	dataIngresso = db.Column(db.DateTime)
-	dataSaida = db.Column(db.DateTime)
-	atividade = db.Column(db.String(120), unique=True)
-	
-	pessoa_id = db.Column(db.Integer, db.ForeignKey('pessoas.id'))
-	#pessoa = db.relationship('Pessoa',  backref=db.backref('funcoes_fk', lazy='dynamic'))
-	
-	def __init__(self, sigla, codigo, nome, dataIngresso, dataSaida, atividade):
-		self.sigla = sigla
-		self.codigo = codigo
-		self.nome = nome
-		self.dataIngresso = dataIngresso
-		self.dataSaida = dataSaida
-		self.atividade = atividade
 
+#class Funcao(db.Model):	
+#	classe   = db.Column(db.String(2)) #ClasseCargoFuncao
+	
+#class PessoaFuncao(db.Model):
+#	__tablename__ = 'funcoes'
+#	id = db.Column(db.Integer, primary_key = True)
+#	sigla = db.Column(db.String(120), unique=True) 
+#	codigo = db.Column(db.String(120), unique=True)
+#	nome = db.Column(db.String(120), unique=True)
+#	dataIngresso = db.Column(db.DateTime)
+#	dataSaida = db.Column(db.DateTime)
+#	atividade = db.Column(db.String(120), unique=True)
+	
+#	pessoa_id = db.Column(db.Integer, db.ForeignKey('pessoas.id'))
+	
 	
 class Campus(db.Model):
 	__tablename__ = 'campus'
@@ -315,7 +304,7 @@ class Setor(db.Model):
 class Titulo(db.Model):
 	__tablename__ = 'titulos'
 	id = db.Column(db.Integer, primary_key = True)
-	titulo = db.Column(db.String(20))
+	titulo = db.Column(db.String(3))
 	area = db.Column(db.String(120)) 
 	instituicao = db.Column(db.String(120))
 	dataInicio = db.Column(db.DateTime)
@@ -324,13 +313,6 @@ class Titulo(db.Model):
 	pessoa_id = db.Column(db.Integer, db.ForeignKey('pessoas.id'))
 	#pessoa = db.relationship('Pessoa',  backref=db.backref('titulos_fk', lazy='dynamic'))
 	
-	def __init__(self, titulo, area, instituicao, dataInicio, dataTermino, pessoa):
-		self.titulo = titulo
-		self.area = area
-		self.instituicao = instituicao
-		self.dataInicio = dataInicio
-		self.dataTermino = dataTermino
-		self.pessoa = pessoa
 
 	def __repr__(self):
 		return '<Titulo %r>' % self.titulo

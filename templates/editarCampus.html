@@ -1,10 +1,9 @@
 {% extends "layoutForm.html" %}
 {% from "_formhelpers.html" import render_hidden,render_label,render_field,botoes_entidade %}
 {% block action %}{{form.id.data}}{% endblock %}
-
+{%block titulo %}Editar Campus{% endblock %}
 {% block formulario %}
 
-<h3>Editar Campus</h3>
 {{ render_hidden(form.id) }}
 <ul class="nav nav-tabs">
   <li class="active"><a data-toggle="tab" href="#geral">Geral</a></li>

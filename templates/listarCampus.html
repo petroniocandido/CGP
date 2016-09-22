@@ -1,28 +1,24 @@
 {% extends "layout.html" %}
+{%block titulo %}Listagem dos Campi{% endblock %}
 {% block content %}
 
-<div class="col-md-6">
-<h3>Listagem de Setores</h3>
-
-  <table class="table table-striped">
-	<thead>
-	  <tr>
-		<th>SIGLA</th>
-		<th>SETOR</th>
-		<th>EDITAR</th>
-	  </tr>
-	</thead>
-	<tbody>
-	  {% for obj in listagem %}
-	  <tr>
-		<td>{{ obj.sigla }}</td>
-		<td>{{ obj.nome }}</td>
-		<td> <a href="/campus/editar/{{ obj.id }}">Editar</a> </td>
-	  </tr>
-	  {% endfor %}              
-	</tbody>
-  </table>
-  <a href="/campus/editar/0" class="btn btn-default btn-lg" role="button">Novo</a>
-</div>
-  
+<table class="table table-striped">
+<thead>
+  <tr>
+	<th>SIGLA</th>
+	<th>SETOR</th>
+	<th>EDITAR</th>
+  </tr>
+</thead>
+<tbody>
+  {% for obj in listagem %}
+  <tr>
+	<td>{{ obj.sigla }}</td>
+	<td>{{ obj.nome }}</td>
+	<td> <a href="/campus/editar/{{ obj.id }}">Editar</a> </td>
+  </tr>
+  {% endfor %}              
+</tbody>
+</table>
+<a href="/campus/editar/0" class="btn btn-default btn-lg" role="button">Novo</a>
 {% endblock %}

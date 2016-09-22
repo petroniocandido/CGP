@@ -1,9 +1,6 @@
 {% extends "layout.html" %}
+{%block titulo %}Listagem de Setores{% endblock %}
 {% block content %}
-
-<div class="col-md-6">
-<h3>Listagem de Setores</h3>
-
   <table class="table table-striped">
 	<thead>
 	  <tr>
@@ -13,16 +10,15 @@
 	  </tr>
 	</thead>
 	<tbody>
-	  {% for setor in setores %}
+	  {% for obj in listagem %}
 	  <tr>
-		<td>{{ setor.sigla }}</td>
-		<td>{{ setor.nome }}</td>
+		<td>{{ obj.sigla }}</td>
+		<td>{{ obj.nome }}</td>
 		<td> <a href="/setores/editar/{{ setor.id }}">Editar</a> </td>
 	  </tr>
 	  {% endfor %}              
 	</tbody>
   </table>
   <a href="/setores/editar/0" class="btn btn-default btn-lg" role="button">Novo</a>
-</div>
   
 {% endblock %}
