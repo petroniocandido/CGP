@@ -1,9 +1,15 @@
-{% extends "layout.html" %}
+{% extends "layoutForm.html" %}
+{% from "_formhelpers.html" import render_hidden,render_label,render_field,botoes_entidade,render_multiple %}
+{% block action %}{{form.id.data}}{% endblock %}
 {%block titulo %}Editar Servidor{% endblock %}
-{% block content %}
+{% block formulario %}
+
+{{ render_hidden(form.id) }}
+
 
 <ul class="nav nav-tabs">
   <li class="active"><a data-toggle="tab" href="#pessoais">Dados Pessoais</a></li>
+  <li><a data-toggle="tab" href="#documentos">Documentos</a></li>
   <li><a data-toggle="tab" href="#funcionais">Dados Funcionais</a></li>
   <li><a data-toggle="tab" href="#progressoes">Progressoes</a></li>
   <li><a data-toggle="tab" href="#ferias">Férias</a></li>
@@ -12,13 +18,41 @@
 <div class="tab-content">
   
   <div id="pessoais" class="tab-pane fade in active">
-    <h3>Dados Pessoais</h3>
-    <p>Some content.</p>
+	  {{ render_field(form.nome) }}
+	  {{ render_field(form.email_Pessoal) }}
+	  {{ render_field(form.dataNascimento) }}
+	  {{ render_field(form.sexo) }}
+	  {{ render_field(form.estadoCivil) }}
+	  {{ render_field(form.nacionalidade) }}
+	  {{ render_field(form.ufNascimento) }}
+	  {{ render_field(form.nomeMae) }}
+	  {{ render_field(form.nomePai) }}
+	  {{ render_field(form.naturalidade) }}
+	  {{ render_field(form.tipoSanguineo) }}
+	  {{ render_field(form.possuiDeficiencia) }}
+	  {{ render_field(form.TipoDeficiencia) }}
+	  {{ render_field(form.raca_cor) }}
+  </div>
+  
+  <div id="documentos" class="tab-pane fade">
+	  {{ render_multiple(form.rg) }}
+	  {{ render_field(form.cpf) }}
+	  {{ render_multiple(form.tituloEleitor) }}
+	  {{ render_multiple(form.certificadoMilitar) }}
+	  {{ render_field(form.passaporte) }}
+	  {{ render_field(form.pis_pasep) }}
   </div>
   
   <div id="funcionais" class="tab-pane fade">
-    <h3>Dados Funcionais</h3>
-    <p>Some content in menu 1.</p>
+	  {{ render_field(form.matricula) }}
+	  {{ render_field(form.tipoServidor) }}
+	  {{ render_field(form.situacaoServidor) }}
+	  {{ render_field(form.jornada) }}
+	  {{ render_field(form.dataCadastroSiape) }}
+	  {{ render_field(form.dataPrimeiroEmprego) }}
+	  {{ render_field(form.email_Institucional) }}
+	  {{ render_field(form.curriculumLattes) }}
+	  {{ render_multiple(form.pagamento) }}
   </div>
   
   <div id="progressoes" class="tab-pane fade">
@@ -30,6 +64,9 @@
     <h3>Férias</h3>
     <p>Some content in menu 2.</p>
   </div>
+  
+  {{ botoes_entidade("pessoas",form.id.data) }}
+  
 </div>
 
 

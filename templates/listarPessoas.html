@@ -11,13 +11,15 @@
   </tr>
 </thead>
 <tbody>
+  {% for obj in listagem %}
   <tr>
-	<td>Petrônio Cândido de Lima e Silva</td>
-	<td>01085679</td>
-	<td>Professor EBTT</td>
-	<td> <a href="/pessoas/editar/">Editar</a> </td>
+	<td>{{ obj.nome }}</td>
+	<td>{{ obj.matricula }}</td>
+	<td>{{ TS[ obj.tipoServidor ] }}</td>
+	<td> <a href="/pessoas/editar/{{ obj.id }}">Editar</a> </td>
   </tr>
-  
+  {% endfor %}
 </tbody>
 </table>
+<a href="/pessoas/editar/0" class="btn btn-default btn-lg" role="button">Novo</a>
 {% endblock %}

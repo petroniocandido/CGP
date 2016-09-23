@@ -1,6 +1,10 @@
 {% macro render_field(field) %}
-  <dt>{{ field.label }}</dt>
-  <dd>{{ field(**kwargs)|safe }}
+  <div class="form-group">
+  {{ field.label(class_="control-label") }}
+  <div class="inputGroupContainer">
+  <div class="input-group">
+  <!-- <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span> -->
+  {{ field(class_="form-control")|safe }}
   {% if field.errors %}
     <ul class=errors>
     {% for error in field.errors %}
@@ -8,12 +12,38 @@
     {% endfor %}
     </ul>
   {% endif %}
-  </dd>
+    </div>
+  </div>
+</div>
+{% endmacro %}
+
+{% macro render_multiple(mfield) %}
+<div class="form-group">
+  {{ mfield.label(class_="control-label") }}
+  <div class="form-inline inputGroupContainer">
+  <!--<div class="form-vertical">-->
+  {% for field in mfield %}
+  {% if field.id != mfield.id + '-csrf_token' %}
+		<div class="form-group">
+		{{ field.label(class_="control-label") }}
+        {{ field(class_="form-control")|safe }}
+        </div>
+  {% endif %}
+  {% endfor %}
+   </div>
+  <!--</div>-->
+</div>
 {% endmacro %}
 
 {% macro render_label(field) %}
-  <dt>{{ field.label }}: {{ field.data }}</dt>
-  <dd></dd>
+  <div class="form-group">
+  <label class="control-label">{{ field.label }}</label>
+  <div class="inputGroupContainer">
+  <div class="input-group">
+	   <label class="control-label">{{ field.data }}</label>  
+  </div>
+  </div>
+</div>
 {% endmacro %}
 
 {% macro render_hidden(field) %}
