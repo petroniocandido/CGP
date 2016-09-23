@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{%block titulo %}Listagem de Níveis e Classes{% endblock %}
+{% block content %}
+<table class="table table-striped">
+<thead>
+  <tr>
+	<th>TIPO DE SERVIDOR</th>
+	<th>CLASSE</th>
+	<th>NÍVEL</th>
+  </tr>
+</thead>
+<tbody>
+  {% for obj in listagem %}
+  <tr>
+	<td>{{ TS[obj.tipoServidor].value }}</td>
+	<td>{{ obj.classe }}</td>
+	<td>{{ obj.nivel }}</td>
+	<td> <a href="/classenivel/editar/{{ obj.id }}">Editar</a> </td>
+  </tr>
+  {% endfor %}              
+</tbody>
+</table>
+<a href="/classenivel/editar/0" class="btn btn-default btn-lg" role="button">Novo</a>
+{% endblock %}
