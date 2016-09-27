@@ -1,5 +1,5 @@
 {% extends "layoutForm.html" %}
-{% from "_formhelpers.html" import render_hidden,render_label,render_field,botoes_entidade,render_inline %}
+{% from "_formhelpers.html" import render_hidden,render_label,render_field,botoes_entidade,render_inline,render_multiple %}
 {% block action %}{{form.id.data}}{% endblock %}
 {%block titulo %}Editar Servidor{% endblock %}
 {% block formulario %}
@@ -20,7 +20,6 @@
   
   <div id="pessoais" class="tab-pane fade in active">
 	  {{ render_field(form.nome) }}
-	  {{ render_field(form.email_Pessoal) }}
 	  {{ render_field(form.dataNascimento) }}
 	  {{ render_field(form.sexo) }}
 	  {{ render_field(form.estadoCivil) }}
@@ -82,8 +81,14 @@
 			{{ render_inline(form.dataCadastroSiape) }}
 		</div>
 	</div>
+	<div class="form-group">
+	  <div class="form-inline inputGroupContainer">
+			{{ render_inline(form.dataPosse) }}
+			{{ render_inline(form.dataExercicio) }}
+			{{ render_inline(form.dataSaida) }}
+		</div>
+	</div>
 	  {{ render_field(form.dataPrimeiroEmprego) }}
-	  {{ render_field(form.email_Institucional) }}
 	  {{ render_field(form.curriculumLattes) }}
 	<div class="form-group">
 	  <label class="control-label">Conta Pagamento</label>
@@ -97,7 +102,11 @@
   </div>
   
   <div id="endereco" class="tab-pane fade">
-    
+	{{ render_field(form.email_Pessoal) }}
+	{{ render_field(form.email_Institucional) }}
+    {{ render_multiple(form.telefone1) }}
+    {{ render_multiple(form.telefone2) }}
+    {{ render_multiple(form.endereco) }}
   </div>
   
   <div id="progressoes" class="tab-pane fade">

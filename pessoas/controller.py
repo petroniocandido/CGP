@@ -4,34 +4,43 @@
 from flask import Flask, render_template, request, flash
 from flask import Blueprint
 from flask_wtf import Form
-from wtforms import StringField,HiddenField,SelectField,FormField,BooleanField
+from wtforms import StringField,HiddenField,SelectField,FormField,BooleanField,FieldList
 from wtforms.fields.html5 import DateField
 from wtforms.validators import DataRequired,Length,Optional
 
-from DomainModel import db,Pessoa,Salvar,Remover,EstadoCivil,TipoServidor,SituacaoServidor,UF,JornadaTrabalho,Sexo,TipoSanguineo,TipoContaBancaria
+from DomainModel import db,Pessoa,Salvar,Remover,EstadoCivil,TipoServidor,SituacaoServidor,\
+UF,JornadaTrabalho,Sexo,TipoSanguineo,TipoContaBancaria,Telefone,Endereco
 
 pessoas = Blueprint('pessoas', __name__)
 
-#class CertificadoMilitarForm(Form):
+class TelefoneForm(Form):
+	ddd = StringField("DDD")
+	numero = StringField("Número")
+	ramal = StringField("Ramal")
+
+class EnderecoForm(Form):
+	logradouro  = StringField("Logradouro")
+	numero  = StringField("Nº")
+	complemento  = StringField("Compl.")
+	bairro  = StringField("Bairro")
+	municipio  = StringField("Município")
+	pais  = StringField("País")
+	estado = SelectField('UF', choices=[(c.value, c.name) for c in UF])
+	cep = StringField("CEP")
 	
 class PessoaForm(Form):
 	id = HiddenField('id')
 	nome = StringField('Nome', validators=[DataRequired(),Length(max=200)])
 	#matriculaOrigem  = db.Column(db.String(12), unique=True)
 	#identificacaoUnica = db.Column(db.String(12), unique=True)
-	
-	#siape = FormField(SiapeForm,"SIAPE")
-	matricula = StringField('Nº SIAPE', validators=[DataRequired()])
-	dataCadastroSiape = DateField("Data Cadastro SIAPE", format="f%Y-%m-%d", validators=[Optional()])
-	
-	#servidor = FormField(ServidorForm,"Tipo/Regime")
+	matricula = StringField('Matrícula', validators=[DataRequired()])
+	dataCadastroSiape = DateField("Data Cadastro SIAPE", format="%Y-%m-%d", validators=[Optional()])
 	tipoServidor = SelectField('Tipo de Servidor', choices=[(c.name, c.value) for c in TipoServidor])
 	jornada = SelectField('Regime/Jornada', choices=[(c.name,c.value) for c in JornadaTrabalho])
 	situacaoServidor = SelectField('Situação do Servidor', choices=[(c.name, c.value) for c in SituacaoServidor])
-	
 	dataNascimento = DateField("Data Nascimento", format="%Y-%m-%d", validators=[Optional()])
 	estadoCivil  = SelectField('Estado Civil', choices=[(c.name,c.value) for c in EstadoCivil])
-	dataPrimeiroEmprego = DateField("Data Primeiro Emprego", format="f%Y-%m-%d", validators=[Optional()])
+	dataPrimeiroEmprego = DateField("Data Primeiro Emprego", format="%Y-%m-%d", validators=[Optional()])
 	nacionalidade = StringField('Nacionalidade')
 	ufNascimento  = SelectField('UF Nascimento', choices=[(c.value, c.name) for c in UF])
 	nomeMae = StringField('Nome Mae')
@@ -45,32 +54,31 @@ class PessoaForm(Form):
 	email_Pessoal = StringField('E-mail Pessoal')
 	email_Institucional = StringField('E-mail Institucional')
 	curriculumLattes = StringField('Curriculum Lattes')
-	#rg = FormField(RGForm,"Identidade")
 	rg_Numero = StringField('Nº')
 	rg_OrgaoExpedidor = StringField('Org. Exp.')
 	rg_UF = SelectField('UF', choices=[(c.name,c.value) for c in UF])
-	rg_Emissao = DateField("Emissão", format="f%Y-%m-%d", validators=[Optional()])
-	
+	rg_Emissao = DateField("Emissão", format="%Y-%m-%d", validators=[Optional()])
 	cpf = StringField('CPF')
 	pis_pasep = StringField('PIS/PASEP')
-	#tituloEleitor = FormField(TituloEleitorForm,"Título de Eleitor")
 	tituloEleitor = StringField('Nº')
 	tituloEleitor_UF = SelectField('UF', choices=[(c.name,c.value) for c in UF])
 	tituloEleitor_Zona = StringField('Zona')
 	tituloEleitor_Secao = StringField('Seção')
-	tituloEleitor_Emissao = DateField("Emissão", format="f%Y-%m-%d", validators=[Optional()])
-	
-	#certificadoMilitar = FormField(CertificadoMilitarForm,"Certificado de Militar")
+	tituloEleitor_Emissao = DateField("Emissão", format="%Y-%m-%d", validators=[Optional()])
 	certificadoMilitar = StringField('Nº ')
 	certificadoMilitar_Orgao = StringField('Orgão')
 	certificadoMilitar_Serie = StringField('Série')
-	
 	passaporte = StringField('Passaporte')
-	#pagamento = FormField(PagamentoForm,"Conta Pagamento")
 	pagamento_Banco = StringField('Banco')
 	pagamento_Agencia = StringField('Agência')
 	pagamento_Conta = StringField('Conta Corrente')
 	pagamento_TipoConta = SelectField('Tipo Conta', choices=[(c.name,c.value) for c in TipoContaBancaria])
+	telefone1 = FormField(TelefoneForm, "Telefone 1", default=lambda: Telefone())
+	telefone2 = FormField(TelefoneForm, "Telefone 2", default=lambda: Telefone())
+	endereco = FormField(EnderecoForm, "Endereço", default=lambda: Endereco())
+	dataPosse = DateField("Posse", format="%Y-%m-%d", validators=[Optional()])
+	dataExercicio = DateField("Exercício", format="%Y-%m-%d", validators=[Optional()])
+	dataSaida = DateField("Saída", format="%Y-%m-%d", validators=[Optional()])
 	
 	
 @pessoas.route('/listar/')

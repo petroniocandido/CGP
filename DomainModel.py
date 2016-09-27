@@ -82,7 +82,7 @@ class JornadaTrabalho(enum.Enum):
 	vh = "20"
 	qh = "40"
 	de = "DE"
-
+	
 class UF(enum.Enum):
 	AC = "AC"
 	AL = "AL"
@@ -149,6 +149,9 @@ class Pessoa(db.Model):
 	dataNascimento = db.Column(db.DateTime)
 	estadoCivil  = db.Column(db.String(2))
 	dataPrimeiroEmprego = db.Column(db.DateTime)
+	dataPosse = db.Column(db.DateTime)
+	dataExercicio = db.Column(db.DateTime)
+	dataSaida = db.Column(db.DateTime)
 	nacionalidade = db.Column(db.String(200))
 	ufNascimento  = db.Column(db.String(2))
 	nomeMae = db.Column(db.String(200))
@@ -159,8 +162,14 @@ class Pessoa(db.Model):
 	possuiDeficiencia = db.Column(db.Boolean)
 	TipoDeficiencia = db.Column(db.String(200))
 	raca_cor = db.Column(db.String(200))
-	enderecos = db.relationship("Endereco", backref="pessoa")
-	telefones = db.relationship("Telefone", backref="pessoa")
+	#enderecos = db.relationship("Endereco", backref="pessoa")
+	endereco_id = db.Column(db.Integer, db.ForeignKey('enderecos.id'))
+	endereco = db.relationship("Endereco")
+	#telefones = db.relationship("Telefone", backref="pessoa")
+	telefone1_id = db.Column(db.Integer, db.ForeignKey('telefones.id'))
+	telefone1 = db.relationship("Telefone", foreign_keys=[telefone1_id])
+	telefone2_id = db.Column(db.Integer, db.ForeignKey('telefones.id'))
+	telefone2 = db.relationship("Telefone", foreign_keys=[telefone2_id])
 	email_Pessoal = db.Column(db.String(120), unique=True)
 	email_Institucional = db.Column(db.String(120), unique=True)
 	curriculumLattes = db.Column(db.String(120), unique=True)
@@ -183,12 +192,19 @@ class Pessoa(db.Model):
 	pagamento_Agencia = db.Column(db.String(12))
 	pagamento_Conta = db.Column(db.String(12))
 	pagamento_TipoConta = db.Column(db.String(2))
-#	cargos = db.relationship("Cargo", backref="pessoa")
-#	funcoes = db.relationship("Funcao", backref="pessoa")
+	cargosfuncoesgratificadas = db.relationship("PessoaCargoFuncaoGratificada", backref="pessoa")
 	titulos = db.relationship("Titulo", backref="pessoa")
 	progressoes = db.relationship("Progressao", backref="pessoa")
 	
 	jornada = db.Column(db.String(2))
+	
+	campusLotacao_id  = db.Column(db.Integer, db.ForeignKey('campus.id'))
+	campusLotacao = db.relationship("Campus", foreign_keys=[campusLotacao_id])
+	campusExercicio_id  = db.Column(db.Integer, db.ForeignKey('campus.id'))
+	campusExercicio = db.relationship("Campus", foreign_keys=[campusExercicio_id])
+	
+	cargo_id = db.Column(db.Integer, db.ForeignKey('cargos.id'))
+	cargo = db.relationship("Cargo")
 	
 		
 	def __repr__(self):
@@ -226,58 +242,39 @@ class Endereco(db.Model):
 	estado = db.Column(db.String(2))
 	cep = db.Column(db.String(10))
 	
-	pessoa_id = db.Column(db.Integer, db.ForeignKey('pessoas.id'))
-	#pessoa = db.relationship('Pessoa',  backref='enderecos_fk')
-	
 	
 class Telefone(db.Model):
 	__tablename__ = 'telefones'
 	id = db.Column(db.Integer, primary_key = True)
 	ddd = db.Column(db.String(2))
 	numero = db.Column(db.String(12))
-	ramal = db.Column(db.String(8))
-	fixo = db.Column(db.Boolean)
-	celular = db.Column(db.Boolean)
-	prestadora = db.Column(db.String(12))
+	ramal = db.Column(db.String(8))	
 	
+	#pessoa_id = db.Column(db.Integer, db.ForeignKey('pessoas.id'))
+
+class Cargo(db.Model):	
+	__tablename__ = 'cargos'
+	id = db.Column(db.Integer, primary_key = True)
+	tipoServidor = db.Column(db.String(2))
+	nome = db.Column(db.String(200))
+	
+
+class CargoFuncaoGratificada(db.Model):	
+	__tablename__ = 'cargosfuncoesgratificadas'
+	id = db.Column(db.Integer, primary_key = True)
+	classe   = db.Column(db.String(2)) #ClasseCargoFuncao
+	nivel    = db.Column(db.String(5)) 
+	
+class PessoaCargoFuncaoGratificada(db.Model):
+	__tablename__ = 'pessoascargosfuncoesgratificadas'
+	id = db.Column(db.Integer, primary_key = True)
+	dataInicio = db.Column(db.DateTime)
+	dataTermino = db.Column(db.DateTime)
+	descricao = db.Column(db.String(120))
+		
 	pessoa_id = db.Column(db.Integer, db.ForeignKey('pessoas.id'))
-
-#class Cargo(db.Model):	
-#	__tablename__ = 'pessoascargos'
-#	id = db.Column(db.Integer, primary_key = True)
-	
-	
-	
-#class PessoaCargo(db.Model):
-#	__tablename__ = 'pessoascargos'
-#	id = db.Column(db.Integer, primary_key = True)
-#	cargo  = db.Column(db.String(200))		
-#	codigoVaga  = db.Column(db.String(200))
-	
-#	padrao   = db.Column(db.String(200))
-#	dataPosse = db.Column(db.DateTime)
-#	dataSaida = db.Column(db.DateTime)
-	
-#	ingresso = db.Column(db.DateTime)
-#	exercicio = db.Column(db.DateTime)
-	
-#	pessoa_id = db.Column(db.Integer, db.ForeignKey('pessoas.id'))
-	#pessoa = db.relationship('Pessoa',  backref=db.backref('cargos_fk', lazy='dynamic'))
-
-#class Funcao(db.Model):	
-#	classe   = db.Column(db.String(2)) #ClasseCargoFuncao
-	
-#class PessoaFuncao(db.Model):
-#	__tablename__ = 'funcoes'
-#	id = db.Column(db.Integer, primary_key = True)
-#	sigla = db.Column(db.String(120), unique=True) 
-#	codigo = db.Column(db.String(120), unique=True)
-#	nome = db.Column(db.String(120), unique=True)
-#	dataIngresso = db.Column(db.DateTime)
-#	dataSaida = db.Column(db.DateTime)
-#	atividade = db.Column(db.String(120), unique=True)
-	
-#	pessoa_id = db.Column(db.Integer, db.ForeignKey('pessoas.id'))
+	cargofuncaogratificada_id = db.Column(db.Integer, db.ForeignKey('cargosfuncoesgratificadas.id'))
+	cargofuncaogratificada = db.relationship("CargoFuncaoGratificada")
 	
 	
 class Campus(db.Model):
@@ -311,8 +308,6 @@ class Titulo(db.Model):
 	dataTermino = db.Column(db.DateTime)
 	
 	pessoa_id = db.Column(db.Integer, db.ForeignKey('pessoas.id'))
-	#pessoa = db.relationship('Pessoa',  backref=db.backref('titulos_fk', lazy='dynamic'))
-	
 
 	def __repr__(self):
 		return '<Titulo %r>' % self.titulo
