@@ -15,7 +15,7 @@
   <tr>
 	<td>{{ obj.nome }}</td>
 	<td>{{ obj.matricula }}</td>
-	<td>{{ TS[ obj.tipoServidor ] }}</td>
+	<td>{{ TS[ obj.tipoServidor ].value }}</td>
 	<td> <a href="/pessoas/editar/{{ obj.id }}">Editar</a> </td>
   </tr>
   {% endfor %}

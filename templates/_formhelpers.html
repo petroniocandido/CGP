@@ -2,19 +2,35 @@
   <div class="form-group">
   {{ field.label(class_="control-label") }}
   <div class="inputGroupContainer">
-  <div class="input-group">
+  <div class="input-group col-lg-8">
   <!-- <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span> -->
-  {{ field(class_="form-control")|safe }}
+  {{ field(class_="form-control form-control-inline")|safe }}
   {% if field.errors %}
-    <ul class=errors>
     {% for error in field.errors %}
-      <li>{{ error }}</li>
+      <div class="alert alert-danger">
+		  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+		{{ error }}
+		</div>
     {% endfor %}
-    </ul>
   {% endif %}
     </div>
   </div>
 </div>
+{% endmacro %}
+
+{% macro render_inline(field) %}
+<div class="form-group">
+		{{ field.label(class_="control-label") }}
+        {{ field(class_="form-control")|safe }}
+        {% if field.errors %}
+			{% for error in field.errors %}
+			  <div class="alert alert-danger">
+				  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				{{ error }}
+				</div>
+			{% endfor %}
+		  {% endif %}
+        </div>
 {% endmacro %}
 
 {% macro render_multiple(mfield) %}
@@ -23,10 +39,21 @@
   <div class="form-inline inputGroupContainer">
   <!--<div class="form-vertical">-->
   {% for field in mfield %}
+  {% if field.id == mfield.id + '-csrf_token' %}
+		{{ field() }}
+  {% endif %}
   {% if field.id != mfield.id + '-csrf_token' %}
 		<div class="form-group">
 		{{ field.label(class_="control-label") }}
         {{ field(class_="form-control")|safe }}
+        {% if field.errors %}
+			{% for error in field.errors %}
+			  <div class="alert alert-danger">
+				  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				{{ error }}
+				</div>
+			{% endfor %}
+		  {% endif %}
         </div>
   {% endif %}
   {% endfor %}

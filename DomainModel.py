@@ -42,8 +42,8 @@ class ClasseCargoFuncao(enum.Enum):
 	CD = "Cargo de Direção"	
 	
 class SituacaoServidor(enum.Enum):
-	Ativo = 1
-	Pensionista = 2
+	A = "Ativo"
+	P = "Pensionista"
 
 class Titulacao(enum.Enum):
 	EBA = "Ensino Básico e Fundamental"

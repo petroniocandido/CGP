@@ -1,5 +1,5 @@
 {% extends "layoutForm.html" %}
-{% from "_formhelpers.html" import render_hidden,render_label,render_field,botoes_entidade,render_multiple %}
+{% from "_formhelpers.html" import render_hidden,render_label,render_field,botoes_entidade,render_inline %}
 {% block action %}{{form.id.data}}{% endblock %}
 {%block titulo %}Editar Servidor{% endblock %}
 {% block formulario %}
@@ -11,7 +11,8 @@
   <li class="active"><a data-toggle="tab" href="#pessoais">Dados Pessoais</a></li>
   <li><a data-toggle="tab" href="#documentos">Documentos</a></li>
   <li><a data-toggle="tab" href="#funcionais">Dados Funcionais</a></li>
-  <li><a data-toggle="tab" href="#progressoes">Progressoes</a></li>
+  <li><a data-toggle="tab" href="#endereco">Endereço e Contatos</a></li>
+  <li><a data-toggle="tab" href="#progressoes">Progressões</a></li>
   <li><a data-toggle="tab" href="#ferias">Férias</a></li>
 </ul>
 
@@ -35,34 +36,76 @@
   </div>
   
   <div id="documentos" class="tab-pane fade">
-	  {{ render_multiple(form.rg) }}
+	 <div class="form-group">
+	  <label class="control-label">Identidade</label>
+		<div class="form-inline inputGroupContainer">
+			{{ render_inline(form.rg_Numero) }}
+			{{ render_inline(form.rg_OrgaoExpedidor) }}
+			{{ render_inline(form.rg_UF) }}
+			{{ render_inline(form.rg_Emissao) }}
+		</div>
+	</div>
 	  {{ render_field(form.cpf) }}
-	  {{ render_multiple(form.tituloEleitor) }}
-	  {{ render_multiple(form.certificadoMilitar) }}
+	  <div class="form-group">
+	  <label class="control-label">Título Eleitor</label>
+		<div class="form-inline inputGroupContainer">
+			{{ render_inline(form.tituloEleitor) }}
+			{{ render_inline(form.tituloEleitor_UF) }}
+			{{ render_inline(form.tituloEleitor_Zona) }}
+			{{ render_inline(form.tituloEleitor_Secao) }}
+			{{ render_inline(form.tituloEleitor_Emissao) }}
+		</div>
+	</div>
+	<div class="form-group">
+	  <label class="control-label">Certificado Militar</label>
+		<div class="form-inline inputGroupContainer">
+			{{ render_inline(form.certificadoMilitar) }}
+			{{ render_inline(form.certificadoMilitar_Orgao) }}
+			{{ render_inline(form.certificadoMilitar_Serie) }}
+		</div>
+	</div>
 	  {{ render_field(form.passaporte) }}
 	  {{ render_field(form.pis_pasep) }}
   </div>
   
   <div id="funcionais" class="tab-pane fade">
-	  {{ render_field(form.matricula) }}
-	  {{ render_field(form.tipoServidor) }}
-	  {{ render_field(form.situacaoServidor) }}
-	  {{ render_field(form.jornada) }}
-	  {{ render_field(form.dataCadastroSiape) }}
+	  <div class="form-group">
+	  <div class="form-inline inputGroupContainer">
+			{{ render_inline(form.tipoServidor) }}
+			{{ render_inline(form.jornada) }}
+			{{ render_inline(form.situacaoServidor) }}
+		</div>
+	</div>
+	<div class="form-group">
+	  <div class="form-inline inputGroupContainer">
+			{{ render_inline(form.matricula) }}
+			{{ render_inline(form.dataCadastroSiape) }}
+		</div>
+	</div>
 	  {{ render_field(form.dataPrimeiroEmprego) }}
 	  {{ render_field(form.email_Institucional) }}
 	  {{ render_field(form.curriculumLattes) }}
-	  {{ render_multiple(form.pagamento) }}
+	<div class="form-group">
+	  <label class="control-label">Conta Pagamento</label>
+		<div class="form-inline inputGroupContainer">
+			{{ render_inline(form.pagamento_Banco) }}
+			{{ render_inline(form.pagamento_Agencia) }}
+			{{ render_inline(form.pagamento_Conta) }}
+			{{ render_inline(form.pagamento_TipoConta) }}
+		</div>
+	</div>
+  </div>
+  
+  <div id="endereco" class="tab-pane fade">
+    
   </div>
   
   <div id="progressoes" class="tab-pane fade">
-    <h3>Progressões</h3>
-    <p>Some content in menu 2.</p>
+    
   </div>
   
   <div id="ferias" class="tab-pane fade">
-    <h3>Férias</h3>
-    <p>Some content in menu 2.</p>
+    
   </div>
   
   {{ botoes_entidade("pessoas",form.id.data) }}
