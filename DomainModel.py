@@ -17,6 +17,7 @@ def Salvar(obj):
 		db.session.commit()
 		return True
 	except Exception as inst:
+		print("ERRO SQLALCHEMY:")
 		print(inst)
 		db.session.rollback()
 		return False
@@ -280,18 +281,18 @@ class PessoaCargoFuncaoGratificada(db.Model):
 class Campus(db.Model):
 	__tablename__ = 'campus'
 	id = db.Column(db.Integer, primary_key = True)
-	sigla = db.Column(db.String(120), unique=True)
-	nome = db.Column(db.String(120), unique=True)
+	sigla = db.Column(db.String(120), unique=True,info={'label': 'Sigla'})
+	nome = db.Column(db.String(120), unique=True,info={'label': 'Nome'})
 		
 
 class Setor(db.Model):
 	__tablename__ = 'setores'
 	id = db.Column(db.Integer, primary_key = True)
-	sigla = db.Column(db.String(120), unique=True)
-	nome = db.Column(db.String(120), unique=True)
-	telefone = db.Column(db.String(12))
+	sigla = db.Column(db.String(120), unique=True,info={'label': 'Sigla'})
+	nome = db.Column(db.String(120), unique=True,info={'label': 'Nome'})
+	telefone = db.Column(db.String(12),info={'label': 'Telefone'})
 	
-	campus_id = db.Column(db.Integer, db.ForeignKey('campus.id'))
+	campus_id = db.Column(db.Integer, db.ForeignKey('campus.id'),info={'label': 'Campus'})
 	campus = db.relationship('Campus')
 	
 	def __repr__(self):

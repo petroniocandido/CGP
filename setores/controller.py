@@ -6,16 +6,17 @@ from flask import Blueprint
 from flask_wtf import Form
 from wtforms import StringField,HiddenField,SelectField
 from wtforms.validators import DataRequired
+from wtforms_alchemy import ModelForm
 
 from DomainModel import db,Setor,Campus,Salvar,Remover
 
 setores = Blueprint('setores', __name__)
 
-class SetorForm(Form):
-	id = HiddenField('id')
-	sigla = StringField('Sigla', validators=[DataRequired()])
-	nome = StringField('Setor', validators=[DataRequired()])
-	telefone = StringField('Telefone')
+class SetorForm(ModelForm):
+	class Meta:
+		model = Setor
+		include = ['id']
+	
 	campus_id = SelectField('Campus', coerce=int, choices=[(c.id, c.sigla) for c in Campus.query.order_by('sigla')])
 	
 @setores.route('/listar/')

@@ -6,15 +6,16 @@ from flask import Blueprint
 from flask_wtf import Form
 from wtforms import StringField,HiddenField
 from wtforms.validators import DataRequired
+from wtforms_alchemy import ModelForm
 
 from DomainModel import db,Campus,Salvar,Remover
 
 campus = Blueprint('campus', __name__)
 
-class CampusForm(Form):
-	id = HiddenField('id')
-	sigla = StringField('Sigla', validators=[DataRequired()])
-	nome = StringField('Campus', validators=[DataRequired()])
+class CampusForm(ModelForm):
+	class Meta:
+		model = Campus
+		include = ['id']
 	
 @campus.route('/listar/')
 def campusListar():

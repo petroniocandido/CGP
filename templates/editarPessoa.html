@@ -12,6 +12,7 @@
   <li><a data-toggle="tab" href="#documentos">Documentos</a></li>
   <li><a data-toggle="tab" href="#funcionais">Dados Funcionais</a></li>
   <li><a data-toggle="tab" href="#endereco">Endereço e Contatos</a></li>
+  <li><a data-toggle="tab" href="#titulos">Títulos</a></li>
   <li><a data-toggle="tab" href="#progressoes">Progressões</a></li>
   <li><a data-toggle="tab" href="#ferias">Férias</a></li>
 </ul>
@@ -75,6 +76,7 @@
 			{{ render_inline(form.situacaoServidor) }}
 		</div>
 	</div>
+	{{ render_inline(form.cargo_id) }}
 	<div class="form-group">
 	  <div class="form-inline inputGroupContainer">
 			{{ render_inline(form.matricula) }}
@@ -107,6 +109,30 @@
     {{ render_multiple(form.telefone1) }}
     {{ render_multiple(form.telefone2) }}
     {{ render_multiple(form.endereco) }}
+  </div>
+  
+  <div id="titulos" class="tab-pane fade">
+    {{ render_multiple(form.titulos) }}
+    <table class="table table-striped">
+<thead>
+  <tr>
+	<th>Nível</th>
+	<th>Área</th>
+	<th>Instituição</th>
+	<th>EDITAR</th>
+  </tr>
+</thead>
+<tbody>
+  {% for obj in titulos %}
+  <tr>
+	<td>{{ TIT[obj.titulo].value }}</td>
+	<td>{{ obj.area }}</td>
+	<td>{{ obj.instituicao }}</td>
+	<td> <a href="/pessoas/editar/{{ obj.id }}">Editar</a> </td>
+  </tr>
+  {% endfor %}
+</tbody>
+</table>
   </div>
   
   <div id="progressoes" class="tab-pane fade">

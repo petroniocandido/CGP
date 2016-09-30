@@ -4,12 +4,13 @@
 from flask import Flask, render_template, request, flash
 from flask import Blueprint
 from flask_wtf import Form
+#from wtforms_alchemy import ModelFieldList
 from wtforms import StringField,HiddenField,SelectField,FormField,BooleanField,FieldList
 from wtforms.fields.html5 import DateField
 from wtforms.validators import DataRequired,Length,Optional
 
 from DomainModel import db,Pessoa,Salvar,Remover,EstadoCivil,TipoServidor,SituacaoServidor,\
-UF,JornadaTrabalho,Sexo,TipoSanguineo,TipoContaBancaria,Telefone,Endereco
+UF,JornadaTrabalho,Sexo,TipoSanguineo,TipoContaBancaria,Telefone,Endereco,Cargo,Titulo,Titulacao
 
 pessoas = Blueprint('pessoas', __name__)
 
@@ -27,6 +28,13 @@ class EnderecoForm(Form):
 	pais  = StringField("País")
 	estado = SelectField('UF', choices=[(c.value, c.name) for c in UF])
 	cep = StringField("CEP")
+	
+class TituloForm(Form):
+	titulo = SelectField('Nível', choices=[(c.name, c.value) for c in Titulacao])
+	area = StringField("Área")
+	instituicao = StringField("Instituição")
+	dataInicio = DateField("Início", format="%Y-%m-%d", validators=[Optional()])
+	dataTermino = DateField("Término", format="%Y-%m-%d", validators=[Optional()])
 	
 class PessoaForm(Form):
 	id = HiddenField('id')
@@ -79,15 +87,17 @@ class PessoaForm(Form):
 	dataPosse = DateField("Posse", format="%Y-%m-%d", validators=[Optional()])
 	dataExercicio = DateField("Exercício", format="%Y-%m-%d", validators=[Optional()])
 	dataSaida = DateField("Saída", format="%Y-%m-%d", validators=[Optional()])
-	
+	cargo_id = SelectField('Cargo', coerce=int, choices=[(c.id, c.nome) for c in Cargo.query.order_by('nome')])
+	#titulos = ModelFieldList(FormField(TituloForm))
+	titulos = FormField(TituloForm, "Título", default=lambda: Titulo())
 	
 @pessoas.route('/listar/')
-def setoresListar():
+def pessoasListar():
 	pessoas = Pessoa.query.all()
 	return render_template('listarPessoas.html',listagem = pessoas, TS = TipoServidor.__members__)
   
 @pessoas.route('/editar/<int:id>',methods=('GET','POST'))
-def setorEditar(id=0):
+def pessoaEditar(id=0):
 	
 	if id == 0:
 		pessoa = Pessoa()
@@ -100,21 +110,21 @@ def setorEditar(id=0):
 		form = PessoaForm(formdata=request.form)
 		
 		if form.validate():
-			print("validou")
 			form.populate_obj(pessoa)
 			if Salvar(pessoa):
 				flash('Salvo com sucesso!','success')
 			else: 
 				flash('Falha ao salvar!','danger')
 		else:
+			print("ERRO!!!")
 			print(form.errors)
 	else:
 		form = PessoaForm(obj=pessoa)
 		
-	return render_template('editarPessoa.html',form=form)
+	return render_template('editarPessoa.html',form=form, titulos=pessoa.titulos, TIT = Titulacao.__members__)
 	
 @pessoas.route('/remover/<int:id>',methods=('GET','POST'))
-def setorRemover(id):
+def pessoaRemover(id):
 	pessoa = Pessoa.query.filter(Pessoa.id == id).first()
 	if Remover(pessoa):
 		flash('Removido com sucesso!','success')
