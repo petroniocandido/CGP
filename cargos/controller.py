@@ -6,15 +6,18 @@ from flask import Blueprint
 from flask_wtf import Form
 from wtforms import StringField,HiddenField,SelectField
 from wtforms.validators import DataRequired
+from wtforms_alchemy import ModelForm
 
 from DomainModel import db,Cargo,Salvar,Remover,TipoServidor
 
 cargos = Blueprint('cargos', __name__)
 
-class CargoForm(Form):
-	id = HiddenField('id')
+class CargoForm(ModelForm):
+	class Meta:
+		model = Cargo
+		include = ['id']
+	
 	tipoServidor = SelectField('Tipo de Servidor', choices=[(c.name, c.value) for c in TipoServidor])
-	nome = StringField('Cargo', validators=[DataRequired()])
 	
 @cargos.route('/listar/')
 def cargosListar():
