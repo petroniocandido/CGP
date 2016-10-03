@@ -6,15 +6,16 @@ from flask import Blueprint
 from flask_wtf import Form
 from wtforms import StringField,HiddenField,SelectField
 from wtforms.validators import DataRequired
+from wtforms_alchemy import ModelForm
 
 from DomainModel import db,ClasseNivel,TipoServidor,Salvar,Remover
 
 classenivel = Blueprint('classenivel', __name__)
 
-class ClasseNivelForm(Form):
-	id = HiddenField('id')
-	classe = StringField('Classe', validators=[DataRequired()])
-	nivel = StringField('Nível', validators=[DataRequired()])
+class ClasseNivelForm(ModelForm):
+	class Meta:
+		model = ClasseNivel
+		include = ['id']
 	tipoServidor = SelectField('Tipo de Servidor', choices=[(c.name, c.value) for c in TipoServidor])
 	
 @classenivel.route('/listar/')

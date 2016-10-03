@@ -300,13 +300,13 @@ class Setor(db.Model):
 class Titulo(db.Model):
 	__tablename__ = 'titulos'
 	id = db.Column(db.Integer, primary_key = True)
-	titulo = db.Column(db.String(3))
-	area = db.Column(db.String(120)) 
-	instituicao = db.Column(db.String(120))
-	dataInicio = db.Column(db.DateTime)
-	dataTermino = db.Column(db.DateTime)
+	titulo = db.Column(db.String(3),info={'label': 'Título'})
+	area = db.Column(db.String(120),info={'label': 'Área'}) 
+	instituicao = db.Column(db.String(120),info={'label': 'Instituição'})
+	dataInicio = db.Column(db.DateTime,info={'label': 'Início'})
+	dataTermino = db.Column(db.DateTime,info={'label': 'Término'})
 	
-	pessoa_id = db.Column(db.Integer, db.ForeignKey('pessoas.id'))
+	pessoa_id = db.Column(db.Integer, db.ForeignKey('pessoas.id'),info={'label': 'Servidor'})
 
 	def __repr__(self):
 		return '<Titulo %r>' % self.titulo

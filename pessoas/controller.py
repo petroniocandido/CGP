@@ -4,7 +4,7 @@
 from flask import Flask, render_template, request, flash
 from flask import Blueprint
 from flask_wtf import Form
-#from wtforms_alchemy import ModelFieldList
+from wtforms_alchemy import ModelForm, ModelFormField, ModelFieldList
 from wtforms import StringField,HiddenField,SelectField,FormField,BooleanField,FieldList
 from wtforms.fields.html5 import DateField
 from wtforms.validators import DataRequired,Length,Optional
@@ -14,88 +14,48 @@ UF,JornadaTrabalho,Sexo,TipoSanguineo,TipoContaBancaria,Telefone,Endereco,Cargo,
 
 pessoas = Blueprint('pessoas', __name__)
 
-class TelefoneForm(Form):
-	ddd = StringField("DDD")
-	numero = StringField("Número")
-	ramal = StringField("Ramal")
+class TelefoneForm(ModelForm):
+	class Meta:
+		model = Telefone
 
-class EnderecoForm(Form):
-	logradouro  = StringField("Logradouro")
-	numero  = StringField("Nº")
-	complemento  = StringField("Compl.")
-	bairro  = StringField("Bairro")
-	municipio  = StringField("Município")
-	pais  = StringField("País")
+class EnderecoForm(ModelForm):
+	class Meta:
+		model = Endereco
 	estado = SelectField('UF', choices=[(c.value, c.name) for c in UF])
-	cep = StringField("CEP")
 	
-class TituloForm(Form):
+	
+class TituloForm(ModelForm):
+	class Meta:
+		model = Titulo
+		include = ['id','pessoa_id']
 	titulo = SelectField('Nível', choices=[(c.name, c.value) for c in Titulacao])
-	area = StringField("Área")
-	instituicao = StringField("Instituição")
-	dataInicio = DateField("Início", format="%Y-%m-%d", validators=[Optional()])
-	dataTermino = DateField("Término", format="%Y-%m-%d", validators=[Optional()])
+	#pessoa_id = HiddenField("pessoa_id")
 	
-class PessoaForm(Form):
-	id = HiddenField('id')
-	nome = StringField('Nome', validators=[DataRequired(),Length(max=200)])
-	#matriculaOrigem  = db.Column(db.String(12), unique=True)
-	#identificacaoUnica = db.Column(db.String(12), unique=True)
-	matricula = StringField('Matrícula', validators=[DataRequired()])
-	dataCadastroSiape = DateField("Data Cadastro SIAPE", format="%Y-%m-%d", validators=[Optional()])
+	
+class PessoaForm(ModelForm):
+	class Meta:
+		model = Pessoa
+		include = ['id']
 	tipoServidor = SelectField('Tipo de Servidor', choices=[(c.name, c.value) for c in TipoServidor])
 	jornada = SelectField('Regime/Jornada', choices=[(c.name,c.value) for c in JornadaTrabalho])
 	situacaoServidor = SelectField('Situação do Servidor', choices=[(c.name, c.value) for c in SituacaoServidor])
-	dataNascimento = DateField("Data Nascimento", format="%Y-%m-%d", validators=[Optional()])
-	estadoCivil  = SelectField('Estado Civil', choices=[(c.name,c.value) for c in EstadoCivil])
-	dataPrimeiroEmprego = DateField("Data Primeiro Emprego", format="%Y-%m-%d", validators=[Optional()])
-	nacionalidade = StringField('Nacionalidade')
 	ufNascimento  = SelectField('UF Nascimento', choices=[(c.value, c.name) for c in UF])
-	nomeMae = StringField('Nome Mae')
-	nomePai = StringField('Nome Pai')
-	naturalidade = StringField('Naturalidade')
 	tipoSanguineo = SelectField('Tipo Sanguineo', choices=[(c.name,c.value) for c in TipoSanguineo])
 	sexo  = SelectField('Sexo', choices=[(c.name, c.value) for c in Sexo])
-	possuiDeficiencia = BooleanField('Possui Deficiência')
-	TipoDeficiencia = StringField('Tipo Deficiência')
-	raca_cor = StringField('Raça/Cor')
-	email_Pessoal = StringField('E-mail Pessoal')
-	email_Institucional = StringField('E-mail Institucional')
-	curriculumLattes = StringField('Curriculum Lattes')
-	rg_Numero = StringField('Nº')
-	rg_OrgaoExpedidor = StringField('Org. Exp.')
 	rg_UF = SelectField('UF', choices=[(c.name,c.value) for c in UF])
-	rg_Emissao = DateField("Emissão", format="%Y-%m-%d", validators=[Optional()])
-	cpf = StringField('CPF')
-	pis_pasep = StringField('PIS/PASEP')
-	tituloEleitor = StringField('Nº')
 	tituloEleitor_UF = SelectField('UF', choices=[(c.name,c.value) for c in UF])
-	tituloEleitor_Zona = StringField('Zona')
-	tituloEleitor_Secao = StringField('Seção')
-	tituloEleitor_Emissao = DateField("Emissão", format="%Y-%m-%d", validators=[Optional()])
-	certificadoMilitar = StringField('Nº ')
-	certificadoMilitar_Orgao = StringField('Orgão')
-	certificadoMilitar_Serie = StringField('Série')
-	passaporte = StringField('Passaporte')
-	pagamento_Banco = StringField('Banco')
-	pagamento_Agencia = StringField('Agência')
-	pagamento_Conta = StringField('Conta Corrente')
 	pagamento_TipoConta = SelectField('Tipo Conta', choices=[(c.name,c.value) for c in TipoContaBancaria])
-	telefone1 = FormField(TelefoneForm, "Telefone 1", default=lambda: Telefone())
-	telefone2 = FormField(TelefoneForm, "Telefone 2", default=lambda: Telefone())
-	endereco = FormField(EnderecoForm, "Endereço", default=lambda: Endereco())
-	dataPosse = DateField("Posse", format="%Y-%m-%d", validators=[Optional()])
-	dataExercicio = DateField("Exercício", format="%Y-%m-%d", validators=[Optional()])
-	dataSaida = DateField("Saída", format="%Y-%m-%d", validators=[Optional()])
+	telefone1 = ModelFormField(TelefoneForm) #, "Telefone 1", default=lambda: Telefone())
+	telefone2 = ModelFormField(TelefoneForm) #, "Telefone 2", default=lambda: Telefone())
+	endereco = ModelFormField(EnderecoForm) #, "Endereço", default=lambda: Endereco())
 	cargo_id = SelectField('Cargo', coerce=int, choices=[(c.id, c.nome) for c in Cargo.query.order_by('nome')])
-	#titulos = ModelFieldList(FormField(TituloForm))
-	titulos = FormField(TituloForm, "Título", default=lambda: Titulo())
+	
 	
 @pessoas.route('/listar/')
 def pessoasListar():
 	pessoas = Pessoa.query.all()
 	return render_template('listarPessoas.html',listagem = pessoas, TS = TipoServidor.__members__)
-  
+
 @pessoas.route('/editar/<int:id>',methods=('GET','POST'))
 def pessoaEditar(id=0):
 	
@@ -133,3 +93,29 @@ def pessoaRemover(id):
 	pessoas = Pessoa.query.all()
 	return render_template('listarPessoas.html',listagem = pessoas, TS = TipoServidor.__members__)
 	
+@pessoas.route('/editarTitulo/<int:pessoa_id>,<int:titulo_id>',methods=('GET','POST'))
+def tituloEditar(pessoa_id=0,titulo_id=0):
+	if titulo_id == 0:
+		titulo = Titulo()
+		titulo.id = 0
+		titulo.pessoa_id = pessoa_id
+		#titulo.pessoa = Pessoa.query.filter(Pessoa.id == pessoa_id).first()		
+	else:
+		titulo = Titulo.query.filter(Titulo.id == titulo_id).first()
+		
+	if request.method == 'POST':
+		form = TituloForm(formdata=request.form)
+		
+		if form.validate():
+			form.populate_obj(titulo)
+			if Salvar(titulo):
+				flash('Salvo com sucesso!','success')
+			else: 
+				flash('Falha ao salvar!','danger')
+		else:
+			print("ERRO!!!")
+			print(form.errors)
+	else:
+		form = TituloForm(obj=titulo)
+		
+	return render_template('editarTitulo.html',form=form)
