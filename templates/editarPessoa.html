@@ -112,7 +112,7 @@
   </div>
   
   <div id="titulos" class="tab-pane fade">
-    <a href="/pessoas/editarTitulo/{{form.id.data}},0" class="btn btn-default btn-lg" role="button">Novo</a>
+    <a href="/titulos/editar/{{form.id.data}},0" class="btn btn-default btn-lg" role="button">Novo</a>
     <table class="table table-striped">
 <thead>
   <tr>
@@ -128,7 +128,7 @@
 	<td>{{ TIT[obj.titulo].value }}</td>
 	<td>{{ obj.area }}</td>
 	<td>{{ obj.instituicao }}</td>
-	<td> <a href="/pessoas/editarTitulo/{{form.id.data}},{{ obj.id }}">Editar</a> </td>
+	<td> <a href="/titulos/editar/{{form.id.data}},{{ obj.id }}">Editar</a> </td>
   </tr>
   {% endfor %}
 </tbody>

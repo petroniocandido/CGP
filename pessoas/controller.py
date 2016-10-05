@@ -24,14 +24,6 @@ class EnderecoForm(ModelForm):
 	estado = SelectField('UF', choices=[(c.value, c.name) for c in UF])
 	
 	
-class TituloForm(ModelForm):
-	class Meta:
-		model = Titulo
-		include = ['id','pessoa_id']
-	titulo = SelectField('Nível', choices=[(c.name, c.value) for c in Titulacao])
-	#pessoa_id = HiddenField("pessoa_id")
-	
-	
 class PessoaForm(ModelForm):
 	class Meta:
 		model = Pessoa
@@ -93,29 +85,3 @@ def pessoaRemover(id):
 	pessoas = Pessoa.query.all()
 	return render_template('listarPessoas.html',listagem = pessoas, TS = TipoServidor.__members__)
 	
-@pessoas.route('/editarTitulo/<int:pessoa_id>,<int:titulo_id>',methods=('GET','POST'))
-def tituloEditar(pessoa_id=0,titulo_id=0):
-	if titulo_id == 0:
-		titulo = Titulo()
-		titulo.id = 0
-		titulo.pessoa_id = pessoa_id
-		#titulo.pessoa = Pessoa.query.filter(Pessoa.id == pessoa_id).first()		
-	else:
-		titulo = Titulo.query.filter(Titulo.id == titulo_id).first()
-		
-	if request.method == 'POST':
-		form = TituloForm(formdata=request.form)
-		
-		if form.validate():
-			form.populate_obj(titulo)
-			if Salvar(titulo):
-				flash('Salvo com sucesso!','success')
-			else: 
-				flash('Falha ao salvar!','danger')
-		else:
-			print("ERRO!!!")
-			print(form.errors)
-	else:
-		form = TituloForm(obj=titulo)
-		
-	return render_template('editarTitulo.html',form=form)
