@@ -265,7 +265,7 @@ class Cargo(db.Model):
 class CargoFuncaoGratificada(db.Model):	
 	__tablename__ = 'cargosfuncoesgratificadas'
 	id = db.Column(db.Integer, primary_key = True)
-	classe   = db.Column(db.String(2),info={'label': 'Classe'}) #ClasseCargoFuncao
+	classe   = db.Column(db.String(2),info={'label': 'Classe', 'choices': [(c.name, c.value) for c in ClasseCargoFuncao]}) 
 	nivel    = db.Column(db.String(5),info={'label': 'Nível'}) 
 	
 class PessoaCargoFuncaoGratificada(db.Model):

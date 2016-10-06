@@ -1,0 +1,30 @@
+{% extends "layoutForm.html" %}
+{% from "_formhelpers.html" import render_hidden,render_label,render_field,botoes_entidade %}
+{% block action %}{{form.id.data}}{% endblock %}
+{%block titulo %}Editar CD/FG{% endblock %}
+{% block formulario %}
+
+{{ render_hidden(form.id) }}
+<ul class="nav nav-tabs">
+  <li class="active"><a data-toggle="tab" href="#geral">Geral</a></li>
+  <li><a data-toggle="tab" href="#auditoria">Auditoria</a></li>
+</ul>
+
+<div class="tab-content">
+  
+  <div id="geral" class="tab-pane fade in active">
+    <dl>
+	{{ render_label(form.id) }}
+    {{ render_field(form.classe) }}
+    {{ render_field(form.nivel) }}
+    </dl>
+  </div>
+  
+  <div id="auditoria" class="tab-pane fade">
+    
+  </div>
+  
+{{ botoes_entidade("cdfg",form.id.data) }}
+
+</div>
+{% endblock %}
