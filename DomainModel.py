@@ -5,6 +5,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.ext.declarative import declared_attr
 import enum
+from wtforms.fields.html5 import DateField
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:root@localhost/CGP'
@@ -144,22 +145,22 @@ class Pessoa(db.Model):
 	matricula = db.Column(db.String(12), unique=True,info={'label': 'Matrícula'})
 	matriculaOrigem  = db.Column(db.String(12), unique=True,info={'label': 'Matrícula de Origem'})
 	identificacaoUnica = db.Column(db.String(12), unique=True,info={'label': 'Identificação Única'})
-	tipoServidor = db.Column(db.String(2),info={'label': 'Tipo Servidor'}) 
-	situacaoServidor = db.Column(db.String(1),info={'label': 'Situação do Servidor'})
+	tipoServidor = db.Column(db.String(2),info={'label': 'Tipo Servidor', 'choices': [(c.name, c.value) for c in TipoServidor]}) 
+	situacaoServidor = db.Column(db.String(1),info={'label': 'Situação do Servidor', 'choices': [(c.name, c.value) for c in SituacaoServidor]})
 	dataCadastroSiape = db.Column(db.DateTime,info={'label': 'Data de Cadastro SIAPE'})
-	dataNascimento = db.Column(db.DateTime,info={'label': 'Data Nascimento'})
-	estadoCivil  = db.Column(db.String(2),info={'label': 'Estado Civil'})
+	dataNascimento = db.Column(db.DateTime,info={'label': 'Data Nascimento','form_field_class': DateField})
+	estadoCivil  = db.Column(db.String(2),info={'label': 'Estado Civil', 'choices': [(c.name, c.value) for c in EstadoCivil]})
 	dataPrimeiroEmprego = db.Column(db.DateTime,info={'label': 'Data do Primeiro Emprego'})
-	dataPosse = db.Column(db.DateTime,info={'label': 'Data Posse'})
-	dataExercicio = db.Column(db.DateTime,info={'label': 'Data Exercício'})
-	dataSaida = db.Column(db.DateTime,info={'label': 'Data Saída'})
+	dataPosse = db.Column(db.DateTime,info={'label': 'Data Posse','form_field_class': DateField})
+	dataExercicio = db.Column(db.DateTime,info={'label': 'Data Exercício','form_field_class': DateField})
+	dataSaida = db.Column(db.DateTime,info={'label': 'Data Saída','form_field_class': DateField})
 	nacionalidade = db.Column(db.String(200),info={'label': 'Nacionalidade'})
-	ufNascimento  = db.Column(db.String(2),info={'label': 'UF Nascimento'})
+	ufNascimento  = db.Column(db.String(2),info={'label': 'UF Nascimento', 'choices': [(c.value, c.name) for c in UF]})
 	nomeMae = db.Column(db.String(200),info={'label': 'Mãe'})
 	nomePai = db.Column(db.String(200),info={'label': 'Pai'})
 	naturalidade = db.Column(db.String(200),info={'label': 'Naturalidade'})
-	tipoSanguineo = db.Column(db.String(3),info={'label': 'Tipo Sanguíneo'})
-	sexo  = db.Column(db.String(1),info={'label': 'Sexo'})
+	tipoSanguineo = db.Column(db.String(3),info={'label': 'Tipo Sanguíneo', 'choices': [(c.name, c.value) for c in TipoSanguineo]})
+	sexo  = db.Column(db.String(1),info={'label': 'Sexo', 'choices': [(c.name, c.value) for c in Sexo]})
 	possuiDeficiencia = db.Column(db.Boolean,info={'label': 'Possui Deficiência'})
 	TipoDeficiencia = db.Column(db.String(200),info={'label': 'Tipo da Deficiência'})
 	raca_cor = db.Column(db.String(200),info={'label': 'Raça/Cor'})
@@ -174,15 +175,15 @@ class Pessoa(db.Model):
 	curriculumLattes = db.Column(db.String(120), unique=True,info={'label': 'Curriculum Lattes'})
 	rg_Numero = db.Column(db.String(200),info={'label': 'Nº'})
 	rg_OrgaoExpedidor = db.Column(db.String(200),info={'label': 'Org. Exp.'})
-	rg_UF = db.Column(db.String(2),info={'label': 'UF'})
-	rg_Emissao = db.Column(db.DateTime,info={'label': 'Emissão'})
+	rg_UF = db.Column(db.String(2),info={'label': 'UF', 'choices': [(c.value, c.name) for c in UF]})
+	rg_Emissao = db.Column(db.DateTime,info={'label': 'Emissão','form_field_class': DateField})
 	cpf = db.Column(db.String(200), unique=True,info={'label': 'CPF'})
 	pis_pasep = db.Column(db.String(20),info={'label': 'PIS/PASEP'})
 	tituloEleitor = db.Column(db.String(20),info={'label': 'Nº'})
-	tituloEleitor_UF = db.Column(db.String(2),info={'label': 'UF'})
+	tituloEleitor_UF = db.Column(db.String(2),info={'label': 'UF', 'choices': [(c.value, c.name) for c in UF]})
 	tituloEleitor_Zona = db.Column(db.String(5),info={'label': 'Zona'})
 	tituloEleitor_Secao = db.Column(db.String(5),info={'label': 'Seção'})
-	tituloEleitor_Emissao = db.Column(db.DateTime,info={'label': 'Emissão'})
+	tituloEleitor_Emissao = db.Column(db.DateTime,info={'label': 'Emissão','form_field_class': DateField})
 	certificadoMilitar = db.Column(db.String(20),info={'label': 'Nº'})
 	certificadoMilitar_Orgao = db.Column(db.String(200),info={'label': 'Orgão'})
 	certificadoMilitar_Serie = db.Column(db.String(20),info={'label': 'Série'})
@@ -190,12 +191,12 @@ class Pessoa(db.Model):
 	pagamento_Banco = db.Column(db.String(5),info={'label': 'Banco'})
 	pagamento_Agencia = db.Column(db.String(12),info={'label': 'Agência'})
 	pagamento_Conta = db.Column(db.String(12),info={'label': 'Conta'})
-	pagamento_TipoConta = db.Column(db.String(2),info={'label': 'Tipo Conta'})
+	pagamento_TipoConta = db.Column(db.String(2),info={'label': 'Tipo Conta', 'choices': [(c.name,c.value) for c in TipoContaBancaria]})
 	cargosfuncoesgratificadas = db.relationship("PessoaCargoFuncaoGratificada", backref="pessoa")
 	titulos = db.relationship("Titulo", backref="pessoa",info={'label': 'Títulos'})
 	progressoes = db.relationship("Progressao", backref="pessoa",info={'label': 'Progressões'})
 	
-	jornada = db.Column(db.String(2),info={'label': 'Jornada'})
+	jornada = db.Column(db.String(2),info={'label': 'Jornada', 'choices': [(c.name, c.value) for c in JornadaTrabalho]})
 	
 	campusLotacao_id  = db.Column(db.Integer, db.ForeignKey('campus.id'),info={'label': 'Campus Lotação'})
 	campusLotacao = db.relationship("Campus", foreign_keys=[campusLotacao_id])
@@ -212,19 +213,22 @@ class Pessoa(db.Model):
 class ClasseNivel(db.Model):
 	__tablename__ = 'classesniveis'
 	id = db.Column(db.Integer, primary_key = True)
-	tipoServidor = db.Column(db.String(2),info={'label': 'Tipo Servidor'})
+	tipoServidor = db.Column(db.String(2),info={'label': 'Tipo Servidor', 'choices': [(c.name, c.value) for c in TipoServidor]})
 	classe = db.Column(db.String(10),info={'label': 'Classe'})
 	nivel = db.Column(db.String(5),info={'label': 'Nível'})
 	
 	def __repr__(self):
-		return '<Classe/Nivel %r>' % self.classe
+		return '<Classe/Nivel %r - %r>' % self.classe, self.nivel
+		
+	def __str__(self):
+		return '%r - %r' % self.classe, self.nivel
 
 class Progressao(db.Model):
 	id = db.Column(db.Integer, primary_key = True)
 	classenivel_id = db.Column(db.Integer, db.ForeignKey('classesniveis.id'))
 	classenivel = db.relationship('ClasseNivel')
-	dataInicio = db.Column(db.DateTime)
-	dataTermino = db.Column(db.DateTime)
+	dataInicio = db.Column(db.DateTime,info={'label': 'Início','form_field_class': DateField})
+	dataTermino = db.Column(db.DateTime,info={'label': 'Término','form_field_class': DateField})
 	
 	pessoa_id = db.Column(db.Integer, db.ForeignKey('pessoas.id'))
 	
@@ -232,44 +236,44 @@ class Progressao(db.Model):
 class Endereco(db.Model):
 	__tablename__ = 'enderecos'
 	id = db.Column(db.Integer, primary_key = True)
-	logradouro  = db.Column(db.String(200))
-	numero  = db.Column(db.String(10))
-	complemento  = db.Column(db.String(200))
-	bairro  = db.Column(db.String(200))
-	municipio  = db.Column(db.String(200))
-	pais  = db.Column(db.String(100))
-	estado = db.Column(db.String(2))
-	cep = db.Column(db.String(10))
+	logradouro  = db.Column(db.String(200),info={'label': 'Logradouro'})
+	numero  = db.Column(db.String(10),info={'label': 'Nº'})
+	complemento  = db.Column(db.String(200),info={'label': 'Compl.'})
+	bairro  = db.Column(db.String(200),info={'label': 'Bairro'})
+	municipio  = db.Column(db.String(200),info={'label': 'Município'})
+	pais  = db.Column(db.String(100),info={'label': 'País'})
+	estado = db.Column(db.String(2),info={'label': 'UF', 'choices': [(c.name, c.value) for c in UF]})
+	cep = db.Column(db.String(10),info={'label': 'CEP'})
 	
 	
 class Telefone(db.Model):
 	__tablename__ = 'telefones'
 	id = db.Column(db.Integer, primary_key = True)
-	ddd = db.Column(db.String(2))
-	numero = db.Column(db.String(12))
-	ramal = db.Column(db.String(8))	
+	ddd = db.Column(db.String(2),info={'label': 'DDD'})
+	numero = db.Column(db.String(12),info={'label': 'Nº'})
+	ramal = db.Column(db.String(8),info={'label': 'Ramal'})	
 	
 	#pessoa_id = db.Column(db.Integer, db.ForeignKey('pessoas.id'))
 
 class Cargo(db.Model):	
 	__tablename__ = 'cargos'
 	id = db.Column(db.Integer, primary_key = True)
-	tipoServidor = db.Column(db.String(2))
-	nome = db.Column(db.String(200))
+	tipoServidor = db.Column(db.String(2),info={'label': 'Tipo Servidor', 'choices': [(c.name, c.value) for c in TipoServidor]})
+	nome = db.Column(db.String(200),info={'label': 'Nome'})
 	
 
 class CargoFuncaoGratificada(db.Model):	
 	__tablename__ = 'cargosfuncoesgratificadas'
 	id = db.Column(db.Integer, primary_key = True)
-	classe   = db.Column(db.String(2)) #ClasseCargoFuncao
-	nivel    = db.Column(db.String(5)) 
+	classe   = db.Column(db.String(2),info={'label': 'Classe'}) #ClasseCargoFuncao
+	nivel    = db.Column(db.String(5),info={'label': 'Nível'}) 
 	
 class PessoaCargoFuncaoGratificada(db.Model):
 	__tablename__ = 'pessoascargosfuncoesgratificadas'
 	id = db.Column(db.Integer, primary_key = True)
-	dataInicio = db.Column(db.DateTime)
-	dataTermino = db.Column(db.DateTime)
-	descricao = db.Column(db.String(120))
+	dataInicio = db.Column(db.DateTime,info={'label': 'Início','form_field_class': DateField})
+	dataTermino = db.Column(db.DateTime,info={'label': 'Término','form_field_class': DateField})
+	descricao = db.Column(db.String(120),info={'label': 'Descrição'})
 		
 	pessoa_id = db.Column(db.Integer, db.ForeignKey('pessoas.id'))
 	cargofuncaogratificada_id = db.Column(db.Integer, db.ForeignKey('cargosfuncoesgratificadas.id'))
@@ -300,11 +304,11 @@ class Setor(db.Model):
 class Titulo(db.Model):
 	__tablename__ = 'titulos'
 	id = db.Column(db.Integer, primary_key = True)
-	titulo = db.Column(db.String(3),info={'label': 'Título'})
+	titulo = db.Column(db.String(3),info={'label': 'Título', 'choices': [(c.name, c.value) for c in Titulacao]})
 	area = db.Column(db.String(120),info={'label': 'Área'}) 
 	instituicao = db.Column(db.String(120),info={'label': 'Instituição'})
-	dataInicio = db.Column(db.DateTime,info={'label': 'Início'})
-	dataTermino = db.Column(db.DateTime,info={'label': 'Término'})
+	dataInicio = db.Column(db.DateTime,info={'label': 'Início','form_field_class': DateField})
+	dataTermino = db.Column(db.DateTime,info={'label': 'Término','form_field_class': DateField})
 	
 	pessoa_id = db.Column(db.Integer, db.ForeignKey('pessoas.id'),info={'label': 'Servidor'})
 

@@ -17,8 +17,6 @@ class CargoForm(ModelForm):
 		model = Cargo
 		include = ['id']
 	
-	tipoServidor = SelectField('Tipo de Servidor', choices=[(c.name, c.value) for c in TipoServidor])
-	
 @cargos.route('/listar/')
 def cargosListar():
 	cargos = Cargo.query.all()

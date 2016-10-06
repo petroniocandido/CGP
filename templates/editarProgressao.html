@@ -1,0 +1,38 @@
+{% extends "layoutForm.html" %}
+{% from "_formhelpers.html" import render_hidden,render_label,render_field,botoes_entidade,render_inline %}
+{% block action %}{{form.pessoa_id.data}},{{form.id.data}}{% endblock %}
+{%block titulo %}Editar Progressão{% endblock %}
+{% block formulario %}
+
+{{ render_hidden(form.id) }}
+<ul class="nav nav-tabs">
+  <li class="active"><a data-toggle="tab" href="#geral">Geral</a></li>
+  <li><a data-toggle="tab" href="#auditoria">Auditoria</a></li>
+</ul>
+
+<div class="tab-content">
+  
+  <div id="geral" class="tab-pane fade in active">
+    <dl>
+	{{ render_hidden(form.pessoa_id) }}
+	{{ render_field(form.classenivel_id) }}
+    <div class="form-group">
+	  <div class="form-inline inputGroupContainer">
+			{{ render_inline(form.dataInicio) }}
+			{{ render_inline(form.dataTermino) }}
+		</div>
+	</div>
+    </dl>
+  </div>
+  
+  <div id="auditoria" class="tab-pane fade">
+    
+  </div>
+  
+<button type="submit" class="btn btn-primary btn-lg" >Salvar</button>
+<a href="/progressoes/remover/{{ form.id.data }}" class="btn btn-danger btn-lg">Apagar</a>
+<a href="/progressoes/editar/{{ form.pessoa_id.data }},0" class="btn btn-default btn-lg" role="button">Novo</a>
+<a href="/pessoas/editar/{{ form.pessoa_id.data }}" class="btn btn-default btn-lg" role="button">Voltar</a>
+
+</div>
+{% endblock %}

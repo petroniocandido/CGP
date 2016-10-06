@@ -9,7 +9,7 @@ from wtforms import StringField,HiddenField,SelectField,FormField,BooleanField,F
 from wtforms.fields.html5 import DateField
 from wtforms.validators import DataRequired,Length,Optional
 
-from DomainModel import db,Pessoa,Salvar,Remover,Titulo,Titulacao
+from DomainModel import db,Pessoa,Salvar,Remover,Titulo
 
 titulos = Blueprint('titulos', __name__)
 
@@ -17,7 +17,6 @@ class TituloForm(ModelForm):
 	class Meta:
 		model = Titulo
 		include = ['id','pessoa_id']
-	titulo = SelectField('Nível', choices=[(c.name, c.value) for c in Titulacao])
 	
 @titulos.route('/editar/<int:pessoa_id>,<int:titulo_id>',methods=('GET','POST'))
 def tituloEditar(pessoa_id=0,titulo_id=0):
@@ -46,7 +45,7 @@ def tituloEditar(pessoa_id=0,titulo_id=0):
 	return render_template('editarTitulo.html',form=form)
 
 @titulos.route('/remover/<int:id>',methods=('GET','POST'))
-def pessoaRemover(id):
+def tituloRemover(id):
 	titulo = Titulo.query.filter(Titulo.id == id).first()
 	pessoa_id = titulo.pessoa_id
 	if Remover(titulo):

@@ -14,6 +14,7 @@ from campus.controller import campus
 from classenivel.controller import classenivel
 from cargos.controller import cargos
 from titulos.controller import titulos
+from progressoes.controller import progressoes
 
 app.register_blueprint(pessoas, url_prefix='/pessoas')
 app.register_blueprint(setores, url_prefix='/setores')
@@ -21,6 +22,7 @@ app.register_blueprint(campus, url_prefix='/campus')
 app.register_blueprint(classenivel, url_prefix='/classenivel')
 app.register_blueprint(cargos, url_prefix='/cargos')
 app.register_blueprint(titulos, url_prefix='/titulos')
+app.register_blueprint(progressoes, url_prefix='/progressoes')
 
 @app.route('/')
 def home():

@@ -16,7 +16,6 @@ class ClasseNivelForm(ModelForm):
 	class Meta:
 		model = ClasseNivel
 		include = ['id']
-	tipoServidor = SelectField('Tipo de Servidor', choices=[(c.name, c.value) for c in TipoServidor])
 	
 @classenivel.route('/listar/')
 def campusListar():
