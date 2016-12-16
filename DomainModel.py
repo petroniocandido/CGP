@@ -148,7 +148,7 @@ class Pessoa(db.Model):
 	tipoServidor = db.Column(db.String(2),info={'label': 'Tipo Servidor', 'choices': [(c.name, c.value) for c in TipoServidor]}) 
 	situacaoServidor = db.Column(db.String(1),info={'label': 'Situação do Servidor', 'choices': [(c.name, c.value) for c in SituacaoServidor]})
 	dataCadastroSiape = db.Column(db.DateTime,info={'label': 'Data de Cadastro SIAPE'})
-	dataNascimento = db.Column(db.DateTime,info={'label': 'Data Nascimento','form_field_class': DateField})
+	dataNascimento = db.Column(db.DateTime,info={'label': 'Data Nascimento','form_field_class': DateField, 'format' : '%Y-%m-%d'})
 	estadoCivil  = db.Column(db.String(2),info={'label': 'Estado Civil', 'choices': [(c.name, c.value) for c in EstadoCivil]})
 	dataPrimeiroEmprego = db.Column(db.DateTime,info={'label': 'Data do Primeiro Emprego'})
 	dataPosse = db.Column(db.DateTime,info={'label': 'Data Posse','form_field_class': DateField})

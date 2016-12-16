@@ -14,6 +14,7 @@
   <li><a data-toggle="tab" href="#endereco">Endereço e Contatos</a></li>
   <li><a data-toggle="tab" href="#titulos">Títulos</a></li>
   <li><a data-toggle="tab" href="#progressoes">Progressões</a></li>
+  <li><a data-toggle="tab" href="#cdfg">Cargos/Funções Gratificadas</a></li>
   <li><a data-toggle="tab" href="#ferias">Férias</a></li>
 </ul>
 
@@ -112,51 +113,55 @@
   </div>
   
   <div id="titulos" class="tab-pane fade">
-    <a href="/titulos/editar/{{form.id.data}},0" class="btn btn-default btn-lg" role="button">Novo</a>
-    <table class="table table-striped">
-<thead>
-  <tr>
-	<th>Nível</th>
-	<th>Área</th>
-	<th>Instituição</th>
-	<th>EDITAR</th>
-  </tr>
-</thead>
-<tbody>
-  {% for obj in titulos %}
-  <tr>
-	<td>{{ TIT[obj.titulo].value }}</td>
-	<td>{{ obj.area }}</td>
-	<td>{{ obj.instituicao }}</td>
-	<td> <a href="/titulos/editar/{{form.id.data}},{{ obj.id }}">Editar</a> </td>
-  </tr>
-  {% endfor %}
-</tbody>
-</table>
+	<a href="/titulos/editar/{{form.id.data}},0" class="btn btn-default btn-lg" role="button">Novo</a>
+	<table class="table table-striped">
+		<thead>
+		  <tr>
+			<th>Nível</th>
+			<th>Área</th>
+			<th>Instituição</th>
+			<th>EDITAR</th>
+		  </tr>
+		</thead>
+		<tbody>
+		  {% for obj in titulos %}
+		  <tr>
+			<td>{{ TIT[obj.titulo].value }}</td>
+			<td>{{ obj.area }}</td>
+			<td>{{ obj.instituicao }}</td>
+			<td> <a href="/titulos/editar/{{form.id.data}},{{ obj.id }}">Editar</a> </td>
+		  </tr>
+		  {% endfor %}
+		</tbody>
+	</table>
   </div>
   
   <div id="progressoes" class="tab-pane fade">
-    <a href="/progressoes/editar/{{form.id.data}},0" class="btn btn-default btn-lg" role="button">Novo</a>
-    <table class="table table-striped">
-<thead>
-  <tr>
-	<th>Classe/Nível</th>
-	<th>Início</th>
-	<th>Término</th>
-	<th>EDITAR</th>
-  </tr>
-</thead>
-<tbody>
-  {% for obj in progressoes %}
-  <tr>
-	<td>{{ obj.classenivel }}</td>
-	<td>{{ obj.dataInicio }}</td>
-	<td>{{ obj.dataTermino }}</td>
-	<td> <a href="/progressoes/editar/{{form.id.data}},{{ obj.id }}">Editar</a> </td>
-  </tr>
-  {% endfor %}
-</tbody>
-</table>
+	<a href="/progressoes/editar/{{form.id.data}},0" class="btn btn-default btn-lg" role="button">Novo</a>
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Classe/Nível</th>
+				<th>Início</th>
+				<th>Término</th>
+				<th>EDITAR</th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for obj in progressoes %}
+			<tr>
+				<td>{{ obj.classenivel }}</td>
+				<td>{{ obj.dataInicio }}</td>
+				<td>{{ obj.dataTermino }}</td>
+				<td> <a href="/progressoes/editar/{{form.id.data}},{{ obj.id }}">Editar</a> </td>
+			</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+  </div>
+  
+  <div id="cdfg" class="tab-pane fade">
+    
   </div>
   
   <div id="ferias" class="tab-pane fade">

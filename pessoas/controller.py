@@ -30,6 +30,10 @@ class PessoaForm(ModelForm):
 	telefone2 = ModelFormField(TelefoneForm)
 	endereco = ModelFormField(EnderecoForm) 
 	cargo_id = SelectField('Cargo', coerce=int, choices=[(c.id, c.nome) for c in Cargo.query.order_by('nome')])
+	dataNascimento  = DateField("Posse", format="%Y-%m-%d", validators=[Optional()])
+	dataPosse = DateField("Posse", format="%Y-%m-%d", validators=[Optional()])
+	dataExercicio = DateField("Exercício", format="%Y-%m-%d", validators=[Optional()])
+	dataSaida = DateField("Saída", format="%Y-%m-%d", validators=[Optional()])
  		
 	
 @pessoas.route('/listar/')
