@@ -1,6 +1,9 @@
 {% extends "layout.html" %}
 {% block content %}
 
+    {% block preformulario %}
+    {% endblock %}
+
  <form id="mainform" class="well form-vertical" method="POST" action="{% block action %}{% endblock %}" 
 	accept-charset="UTF-8" role="form">
 	 <fieldset>
@@ -11,5 +14,7 @@
      </fieldset>
  </form>
 
+    {% block posformulario %}
+    {% endblock %}
 
 {% endblock %}

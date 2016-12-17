@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, redirect
 
 import sys
 reload(sys)
@@ -28,7 +28,7 @@ app.register_blueprint(cdfg, url_prefix='/cdfg')
 
 @app.route('/')
 def home():
-	return render_template('listarPessoas.html')
+	return redirect('pessoas/listar')
 	
 	
 if __name__ == '__main__':

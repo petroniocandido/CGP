@@ -77,6 +77,10 @@
   <input type="hidden" name="{{ field.name }}" value="{{ field.data }}">
 {% endmacro %}
 
+{% macro botoes_busca() %}
+  <button id="btnBuscar" type="submit" class="btn btn-primary" >Buscar</button>
+{% endmacro %}
+
 {% macro botoes_entidade(entidade,id) %}
   <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#SalvarModal">

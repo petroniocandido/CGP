@@ -14,6 +14,10 @@ UF,JornadaTrabalho,Sexo,TipoSanguineo,TipoContaBancaria,Telefone,Endereco,Cargo,
 
 pessoas = Blueprint('pessoas', __name__)
 
+class PessoaBuscaForm(Form):
+	id = HiddenField('id')
+	nome = StringField('Nome')
+
 class TelefoneForm(ModelForm):
 	class Meta:
 		model = Telefone
@@ -36,10 +40,19 @@ class PessoaForm(ModelForm):
 	dataSaida = DateField("Saída", format="%Y-%m-%d", validators=[Optional()])
  		
 	
-@pessoas.route('/listar/')
+@pessoas.route('/listar/',methods=('GET','POST'))
 def pessoasListar():
-	pessoas = Pessoa.query.all()
-	return render_template('listarPessoas.html',listagem = pessoas, TS = TipoServidor.__members__)
+	pessoa = Pessoa()
+	if request.method == 'GET':
+		pessoas = Pessoa.query.order_by(Pessoa.nome).all()
+		form = PessoaBuscaForm(obj=pessoa)
+	else:
+		form = PessoaBuscaForm(formdata=request.form)
+		form.populate_obj(pessoa)
+		pessoas = Pessoa.query.filter(Pessoa.nome.match(pessoa.nome+"*")).all()
+
+	return render_template('listarPessoas.html',form=form, listagem=pessoas, TS=TipoServidor.__members__)
+
 
 @pessoas.route('/editar/<int:id>',methods=('GET','POST'))
 def pessoaEditar(id=0):
@@ -47,22 +60,21 @@ def pessoaEditar(id=0):
 	if id == 0:
 		pessoa = Pessoa()
 		pessoa.id = 0
-		print(id)
 	else:
 		pessoa = Pessoa.query.filter(Pessoa.id == id).first()
 	
 	if request.method == 'POST':
+
 		form = PessoaForm(formdata=request.form)
-		
+
 		if form.validate():
 			form.populate_obj(pessoa)
 			if Salvar(pessoa):
 				flash('Salvo com sucesso!','success')
-			else: 
+			else:
 				flash('Falha ao salvar!','danger')
 		else:
-			print("ERRO!!!")
-			print(form.errors)
+			flash('Falha ao salvar!', 'danger')
 	else:
 		form = PessoaForm(obj=pessoa)
 		

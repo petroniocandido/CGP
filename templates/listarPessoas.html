@@ -1,6 +1,27 @@
-{% extends "layout.html" %}
+{% extends "layoutForm.html" %}
+{% from "_formhelpers.html" import render_field,botoes_busca %}
 {%block titulo %}Listagem de Servidores{% endblock %}
-{% block content %}
+{% block action %}{% endblock %}
+{% block formulario %}
+<div class="panel-group">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" href="#collapse1">Filtrar Lista</a>
+      </h4>
+    </div>
+    <div id="collapse1" class="panel-collapse collapse">
+      <div class="panel-body">
+          <dl>{{ render_field(form.nome) }}</dl>
+      </div>
+      <div class="panel-footer">
+          {{ botoes_busca() }}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block posformulario %}
 <table class="table table-striped">
 <thead>
   <tr>
