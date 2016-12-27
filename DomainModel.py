@@ -156,6 +156,18 @@ class Entidade(db.Model):
 # def usuarioUltimaModificacao(cls):
 #	return db.relationship('Pessoa', foreign_keys=[usuarioUltimaModificacao_id])
 
+class Log(db.Model):
+    __tablename__ = 'logs'
+    id = db.Column(db.Integer, primary_key=True)
+    data = db.Column(db.DateTime, info={'label': 'Data Posse'})
+    pessoa_id = db.Column(db.Integer, db.ForeignKey('pessoas.id'), info={'label': 'Usuário'})
+    pessoa = db.relationship("Pessoa")
+    url = db.Column(db.String(500), nullable=False, info={'label': 'URL'})
+    descricao = db.Column(db.String(500), nullable=False, info={'label': 'Evento'})
+    entidade = db.Column(db.String(100),  info={'label': 'Entidade'})
+    entidade_id = db.Column(db.Integer, info={'label': 'Entidade ID'})
+
+
 perfis_permissoes = db.Table('perfis_permissoes',
     db.Column('perfil_id', db.Integer, db.ForeignKey('perfis.id')),
     db.Column('permissao_id', db.Integer, db.ForeignKey('permissoes.id'))

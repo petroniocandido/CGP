@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{%block titulo %}Listagem de Logs{% endblock %}
+{% block content %}
+  <table class="table table-striped">
+	<thead>
+	  <tr>
+		<th>DATA</th>
+		<th>USUARIO</th>
+		  <th>EVENTO</th>
+		<th>DETALHES</th>
+	  </tr>
+	</thead>
+	<tbody>
+	  {% for obj in listagem %}
+	  <tr>
+		<td>{{ obj.data }}</td>
+		<td>{{ obj.pessoa }}</td>
+		  <td>{{ obj.descricao }}</td>
+		<td> <a href="/logs/editar/{{ obj.id }}">Detalhes</a> </td>
+	  </tr>
+	  {% endfor %}              
+	</tbody>
+  </table>
+  
+{% endblock %}

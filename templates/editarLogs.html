@@ -1,0 +1,25 @@
+{% extends "layoutForm.html" %}
+{% from "_formhelpers.html" import render_hidden,render_label,render_field,botoes_entidade %}
+{% block action %}{{form.id.data}}{% endblock %}
+{%block titulo %}Detalhes do Evento{% endblock %}
+{% block formulario %}
+
+{{ render_hidden(form.id) }}
+
+<ul class="nav nav-tabs">
+  <li class="active"><a data-toggle="tab" href="#geral">Geral</a></li>
+</ul>
+
+<div class="tab-content">
+  
+  <div id="geral" class="tab-pane fade in active">
+    <dl>
+	{{ render_label(form.id) }}
+    {{ render_field(form.url) }}
+    </dl>
+  </div>
+
+{{ botoes_entidade("permissoes",form.id.data) }}
+
+</div>
+{% endblock %}
