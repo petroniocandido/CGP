@@ -7,6 +7,7 @@ from sqlalchemy.ext.declarative import declared_attr
 import enum
 from wtforms.fields.html5 import DateField
 from sqlalchemy_utils import PasswordType
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:root@localhost/CGP'
@@ -16,7 +17,10 @@ db = SQLAlchemy(app)
 
 def Salvar(obj):
     try:
-        db.session.add(obj)
+        if obj.id > 0:
+            db.session.add(obj)
+        else:
+            db.session.merge(obj)
         db.session.commit()
         return True
     except Exception as inst:
@@ -175,7 +179,7 @@ class Pessoa(db.Model):
     __tablename__ = 'pessoas'
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(200), nullable=False, info={'label': 'Nome'})
-    matricula = db.Column(db.String(12), unique=True, info={'label': 'Matrícula'})
+    matricula = db.Column(db.String(12), info={'label': 'Matrícula'})
     matriculaOrigem = db.Column(db.String(12), unique=False, info={'label': 'Matrícula de Origem'})
     identificacaoUnica = db.Column(db.String(12), unique=False, info={'label': 'Identificação Única'})
     tipoServidor = db.Column(db.String(2),
@@ -209,7 +213,7 @@ class Pessoa(db.Model):
     telefone2 = db.relationship("Telefone", foreign_keys=[telefone2_id])
     email_Pessoal = db.Column(db.String(120), unique=False, info={'label': 'E-mail Pessoal'})
     email_Institucional = db.Column(db.String(120), unique=False, info={'label': 'E-mail Institucional'})
-    senha = db.Column(PasswordType(schemes=['pbkdf2_sha512']), info={'label': 'Senha'})
+    senha = db.Column(db.String(200), info={'label': 'Senha'})
     curriculumLattes = db.Column(db.String(120), unique=False, info={'label': 'Curriculum Lattes'})
     rg_Numero = db.Column(db.String(200), info={'label': 'Nº'})
     rg_OrgaoExpedidor = db.Column(db.String(200), info={'label': 'Org. Exp.'})
@@ -248,6 +252,12 @@ class Pessoa(db.Model):
 
     perfil_id  = db.Column(db.Integer, db.ForeignKey('perfis.id'), info={'label': 'Perfil'})
     perfil = db.relationship("Perfil")
+
+    def set_senha(self, password):
+        self.senha = generate_password_hash(password)
+
+    def checar_senha(self, password):
+        return check_password_hash(self.senha, password)
 
     def __repr__(self):
         return '<Pessoa %r>' % self.nome
