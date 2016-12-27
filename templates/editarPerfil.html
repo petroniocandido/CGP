@@ -1,0 +1,70 @@
+{% extends "layoutForm.html" %}
+{% from "_formhelpers.html" import isactive_li,isactive_div,render_hidden,render_label,render_field,render_inline,botoes_entidade %}
+{% block action %}{{form.id.data}}{% endblock %}
+{%block titulo %}Editar Perfil{% endblock %}
+{% block formulario %}
+
+{{ render_hidden(form.id) }}
+
+<ul class="nav nav-tabs">
+  <li {{ isactive_li(tab,'geral') }}><a data-toggle="tab" href="#geral">Geral</a></li>
+  <li {{ isactive_li(tab,'permissoes') }}><a data-toggle="tab" href="#permissoes">Permissões</a></li>
+  <li><a data-toggle="tab" href="#auditoria">Auditoria</a></li>
+</ul>
+
+<div class="tab-content">
+  
+  <div id="geral" class="tab-pane fade in {{ isactive_div(tab,'geral') }}">
+    <dl>
+	{{ render_label(form.id) }}
+    {{ render_field(form.nome) }}
+    </dl>
+  </div>
+
+   <div id="permissoes" class="tab-pane fade in {{ isactive_div(tab,'permissoes') }}">
+
+     <div class="form-group">
+	  <div class="form-inline inputGroupContainer">
+			{{ render_inline(form.permissao_id) }}
+			<input id="btnAdd" type="button" class="btn btn-default" value="Adicionar" onclick="addclick();" />
+		</div>
+	</div>
+
+	<table class="table table-striped">
+		<thead>
+		  <tr>
+			<th>URL</th>
+			<th>REMOVER</th>
+		  </tr>
+		</thead>
+		<tbody>
+		  {% for obj in permissoes %}
+		  <tr>
+			<td>{{ obj.url }}</td>
+			<td> <a href="/perfis/removePermissao/{{form.id.data}},{{obj.id}}">Remover</a> </td>
+		  </tr>
+		  {% endfor %}
+		</tbody>
+	</table>
+  </div>
+  
+  <div id="auditoria" class="tab-pane fade">
+    
+  </div>
+  
+{{ botoes_entidade("perfis",form.id.data) }}
+
+</div>
+{% endblock %}
+
+{% block js %}
+<script src="https://github.com/mgalante/jquery.redirect/blob/master/jquery.redirect.js"></script>
+
+<script>
+  function addclick() {
+    var sel = $('#permissao_id').val();
+    var url = '/perfis/addPermissao/{{form.id.data}},'+ sel;
+    window.location.replace(url);
+   }
+</script>
+{% endblock %}

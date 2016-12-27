@@ -14,7 +14,7 @@
 		
 	<!-- Tema opcional -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" 
-		integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"
+		integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
     <!-- HTML5 shim e Respond.js para suporte no IE8 de elementos HTML5 e media queries -->
     <!-- ALERTA: Respond.js não funciona se você visualizar uma página file:// -->
@@ -43,7 +43,8 @@
           <ul class="nav navbar-nav">
             <li class="active"><a href="/pessoas/listar/">Home</a></li>
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Cadastros <span class="caret"></span></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                 aria-expanded="false">Cadastros <span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="/campus/listar">Campus</a></li>
                 <li><a href="/setores/listar/">Setores</a></li>
@@ -52,8 +53,18 @@
                 <li><a href="/cdfg/listar">CD/FG</a></li>
               </ul>
             </li>
+              <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                 aria-expanded="false">Segurança <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="/perfis/listar">Perfis</a></li>
+                <li><a href="/permissoes/listar">Permissões</a></li>
+                <li><a href="#">Logs</a></li>
+              </ul>
+            </li>
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Relatórios <span class="caret"></span></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                 aria-expanded="false">Relatórios <span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="#">Setores</a></li>
                 <li><a href="#">Cargos</a></li>
@@ -66,11 +77,7 @@
     </nav>
 
 	<div class="container theme-showcase" role="main">	
-	
-	<div class="page-header">
-		<h2></h2>
-	</div>
-		
+
 	<div class="page-header">
 		<h2>{% block titulo %}{% endblock %}</h2>
 	</div>
@@ -87,6 +94,8 @@
 		
     {% block content %}
     {% endblock %}
+
+    </div>
     
     <!-- jQuery (obrigatório para plugins JavaScript do Bootstrap) -->	
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
@@ -94,5 +103,9 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" 
 		integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" 
 		crossorigin="anonymous"></script>
+
+        {% block js %}
+    {% endblock %}
+
   </body>
 </html>

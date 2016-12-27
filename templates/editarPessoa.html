@@ -16,6 +16,7 @@
   <li><a data-toggle="tab" href="#progressoes">Progressões</a></li>
   <li><a data-toggle="tab" href="#cdfg">Cargos/Funções Gratificadas</a></li>
   <li><a data-toggle="tab" href="#ferias">Férias</a></li>
+    <li><a data-toggle="tab" href="#seguranca">Segurança</a></li>
 </ul>
 
 <div class="tab-content">
@@ -166,6 +167,11 @@
   
   <div id="ferias" class="tab-pane fade">
     
+  </div>
+
+	<div id="seguranca" class="tab-pane fade">
+        {{ render_field(form.senha) }}
+        {{ render_field(form.perfil_id) }}
   </div>
   
   {{ botoes_entidade("pessoas",form.id.data) }}

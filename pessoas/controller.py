@@ -5,12 +5,12 @@ from flask import Flask, render_template, request, flash, redirect, url_for
 from flask import Blueprint
 from flask_wtf import Form
 from wtforms_alchemy import ModelForm, ModelFormField, ModelFieldList
-from wtforms import StringField,HiddenField,SelectField,FormField,BooleanField,FieldList
+from wtforms import StringField,HiddenField,SelectField,FormField,BooleanField,FieldList,PasswordField
 from wtforms.fields.html5 import DateField
 from wtforms.validators import DataRequired,Length,Optional
 
 from DomainModel import db,Pessoa,Salvar,Remover,EstadoCivil,TipoServidor,SituacaoServidor,\
-UF,JornadaTrabalho,Sexo,TipoSanguineo,TipoContaBancaria,Telefone,Endereco,Cargo,Titulo,Titulacao
+UF,JornadaTrabalho,Sexo,TipoSanguineo,TipoContaBancaria,Telefone,Endereco,Cargo,Titulo,Titulacao,Perfil
 
 pessoas = Blueprint('pessoas', __name__)
 
@@ -34,10 +34,12 @@ class PessoaForm(ModelForm):
 	telefone2 = ModelFormField(TelefoneForm)
 	endereco = ModelFormField(EnderecoForm) 
 	cargo_id = SelectField('Cargo', coerce=int, choices=[(c.id, c.nome) for c in Cargo.query.order_by('nome')])
+	perfil_id = SelectField('Perfil', coerce=int, choices=[(c.id, c.nome) for c in Perfil.query.order_by('nome')])
 	dataNascimento  = DateField("Posse", format="%Y-%m-%d", validators=[Optional()])
 	dataPosse = DateField("Posse", format="%Y-%m-%d", validators=[Optional()])
 	dataExercicio = DateField("Exercício", format="%Y-%m-%d", validators=[Optional()])
 	dataSaida = DateField("Saída", format="%Y-%m-%d", validators=[Optional()])
+	senha = PasswordField()
  		
 	
 @pessoas.route('/listar/',methods=('GET','POST'))

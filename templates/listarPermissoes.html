@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{%block titulo %}Listagem de Permissões{% endblock %}
+{% block content %}
+  <table class="table table-striped">
+	<thead>
+	  <tr>
+		<th>ID</th>
+		<th>URL</th>
+		<th>EDITAR</th>
+	  </tr>
+	</thead>
+	<tbody>
+	  {% for obj in listagem %}
+	  <tr>
+		<td>{{ obj.id }}</td>
+		<td>{{ obj.url }}</td>
+		<td> <a href="/permissoes/editar/{{ obj.id }}">Editar</a> </td>
+	  </tr>
+	  {% endfor %}              
+	</tbody>
+  </table>
+  <a href="/permissoes/editar/0" class="btn btn-default btn-lg" role="button">Novo</a>
+  
+{% endblock %}

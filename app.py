@@ -8,6 +8,8 @@ app = Flask(__name__)
 
 app.config['SECRET_KEY'] = "1!aA2@sS3#dD4$fF5%gG"
 
+from perfis.controller import perfis
+from permissoes.controller import permissoes
 from pessoas.controller import pessoas
 from setores.controller import setores
 from campus.controller import campus
@@ -17,6 +19,8 @@ from titulos.controller import titulos
 from progressoes.controller import progressoes
 from cdfg.controller import cdfg
 
+app.register_blueprint(perfis, url_prefix='/perfis')
+app.register_blueprint(permissoes, url_prefix='/permissoes')
 app.register_blueprint(pessoas, url_prefix='/pessoas')
 app.register_blueprint(setores, url_prefix='/setores')
 app.register_blueprint(campus, url_prefix='/campus')
