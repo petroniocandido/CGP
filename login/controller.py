@@ -7,7 +7,7 @@ from flask_wtf import Form
 from wtforms import StringField, HiddenField, SelectField, PasswordField
 from wtforms.validators import DataRequired
 
-from DomainModel import Log, Pessoa, Salvar, Remover
+from DomainModel import TipoLog, Log, Pessoa, Salvar, Remover, appendLog
 
 login = Blueprint('login', __name__)
 
@@ -24,13 +24,16 @@ def efetuarLogin():
         if form.validate():
             pessoa = Pessoa.query.filter(Pessoa.email_Institucional == form.login.data).first()
             if pessoa == None:
+                appendLog(TipoLog.ERRO, "Login incorreto: " + form.login.data, None)
                 flash('E-mail ou senha incorretos!', 'danger')
             else:
                 if pessoa.checar_senha(form.senha.data):
                     session["usuario_id"] = pessoa.id
                     session["usuario_nome"] = pessoa.email_Institucional
+                    appendLog(TipoLog.SUCESSO,"Login bem sucedido",pessoa)
                     return redirect(url_for('pessoas.pessoasListar'))
                 else:
+                    appendLog(TipoLog.ERRO, "Senha incorreta: " + form.login.data, None)
                     flash('E-mail ou senha incorretos!', 'danger')
     else:
         form = LoginForm()

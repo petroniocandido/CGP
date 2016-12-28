@@ -1,7 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-from flask import Flask
+import datetime
+from flask import Flask, request, session
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.ext.declarative import declared_attr
 import enum
@@ -40,6 +41,34 @@ def Remover(obj):
         db.session.rollback()
         return False
 
+def appendLog(tipo, descricao,obj):
+    try:
+        log = Log()
+        log.data = datetime.datetime.now()
+        if session["usuario_id"] is not None:
+            log.pessoa = Pessoa.query.get(int(session["usuario_id"]))
+        if obj is not None:
+            log.entidade = type(obj)
+            log.entidade_id = obj.id
+        else:
+            log.entidade = ''
+            log.entidade_id = 0
+        log.url = request.path
+        log.descricao = descricao
+        log.tipo = (tipo.value)
+        db.session.add(log)
+        db.session.commit()
+        return True
+    except Exception as inst:
+        print(inst)
+        db.session.rollback()
+        return False
+
+class TipoLog(enum.Enum):
+    INFO = "IN"
+    SUCESSO = "OK"
+    ERRO = "ER"
+    ERROGRAVE = "GR"
 
 class TipoServidor(enum.Enum):
     DE = "Docente Efetivo"
@@ -159,6 +188,7 @@ class Entidade(db.Model):
 class Log(db.Model):
     __tablename__ = 'logs'
     id = db.Column(db.Integer, primary_key=True)
+    tipo = db.Column(db.String(2), info={'label': 'Tipo'})
     data = db.Column(db.DateTime, info={'label': 'Data Posse'})
     pessoa_id = db.Column(db.Integer, db.ForeignKey('pessoas.id'), info={'label': 'Usuário'})
     pessoa = db.relationship("Pessoa")

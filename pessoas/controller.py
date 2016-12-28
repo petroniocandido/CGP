@@ -72,7 +72,8 @@ def pessoaEditar(id=0):
     if request.method == 'POST':
         form = PessoaForm(formdata=request.form)
         form.populate_obj(pessoa)
-        pessoa.set_senha(form.senha.data)
+        if form.senha.data is not None:
+            pessoa.set_senha(form.senha.data)
 
         if form.validate():
 
