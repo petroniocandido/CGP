@@ -8,7 +8,9 @@ from wtforms import StringField, HiddenField, SelectField
 from wtforms.validators import DataRequired
 from wtforms_alchemy import ModelForm
 
-from DomainModel import Perfil, Permissao, Salvar, Remover
+from ControllerBase import SalvarEntidade,RemoverEntidade
+
+from DomainModel import Perfil, Permissao
 
 perfis = Blueprint('perfis', __name__)
 
@@ -21,14 +23,14 @@ class PerfilForm(ModelForm):
 
 
 @perfis.route('/listar/')
-def perfisListar():
+def Listar():
     perfis = Perfil.query.all()
     return render_template('listarPerfis.html', listagem=perfis)
 
 
 @perfis.route('/editar/<int:id>', methods=('GET', 'POST'))
 @perfis.route('/editar/<int:id>,<string:tab>', methods=('GET', 'POST'))
-def perfilEditar(id=0,tab="geral"):
+def Editar(id=0,tab="geral"):
     if id == 0:
         perfil = Perfil()
         perfil.id = 0
@@ -38,12 +40,9 @@ def perfilEditar(id=0,tab="geral"):
     if request.method == 'POST':
         form = PerfilForm(formdata=request.form)
 
-        if form.validate():
-            form.populate_obj(perfil)
-            if Salvar(perfil):
-                flash('Salvo com sucesso!', 'success')
-            else:
-                flash('Falha ao salvar!', 'danger')
+        form.populate_obj(perfil)
+
+        SalvarEntidade(form,perfil)
     else:
         form = PerfilForm(obj=perfil)
 
@@ -51,14 +50,10 @@ def perfilEditar(id=0,tab="geral"):
 
 
 @perfis.route('/remover/<int:id>', methods=('GET', 'POST'))
-def perfilRemover(id):
+def Remover(id):
     perfil = Perfil.query.filter(Perfil.id == id).first()
-    if Remover(perfil):
-        flash('Removido com sucesso!', 'success')
-    else:
-        flash('Falha ao remover!', 'danger')
-    perfis = perfil.query.all()
-    return render_template('listarPerfis.html', listagem=perfis)
+    RemoverEntidade(perfil)
+    return redirect(url_for('.Listar'))
 
 
 @perfis.route('/addPermissao/<int:id>,<int:perm>', methods=('GET','POST'))
@@ -68,12 +63,9 @@ def perfilAddPermissao(id=0,perm=0):
 
     perfil.permissoes.append(permissao)
 
-    if Salvar(perfil):
-        flash('Adicionado com sucesso!', 'success')
-    else:
-        flash('Falha ao adicionar!', 'danger')
+    SalvarEntidade(perfil,"Adicionar permissão")
 
-    return redirect(url_for('.perfilEditar', id=id, tab="permissoes"))
+    return redirect(url_for('.Editar', id=id, tab="permissoes"))
 
 
 @perfis.route('/removePermissao/<int:id>,<int:perm>', methods=('GET','POST'))
@@ -83,9 +75,6 @@ def perfilRemovePermissao(id=0,perm=0):
 
     perfil.permissoes.remove(permissao)
 
-    if Salvar(perfil):
-        flash('Removido com sucesso!', 'success')
-    else:
-        flash('Falha ao remover!', 'danger')
+    RemoverEntidade(perfil,"Remover permissão")
 
-    return redirect(url_for('.perfilEditar', id=id, tab="permissoes"))
+    return redirect(url_for('.Editar', id=id, tab="permissoes"))

@@ -8,7 +8,9 @@ from wtforms import StringField, HiddenField, SelectField
 from wtforms.validators import DataRequired
 from wtforms_alchemy import ModelForm
 
-from DomainModel import Log, Salvar, Remover
+from ControllerBase import SalvarEntidade,RemoverEntidade
+
+from DomainModel import Log
 
 logs = Blueprint('logs', __name__)
 
@@ -20,13 +22,13 @@ class LogForm(ModelForm):
     
 
 @logs.route('/listar/')
-def logsListar():
+def Listar():
     logs = Log.query.order_by(Log.data).all()
     return render_template('listarLogs.html', listagem=logs)
 
 
 @logs.route('/editar/<int:id>', methods=('GET', 'POST'))
-def logEditar(id=0,tab="geral"):
+def Editar(id=0,tab="geral"):
     if id == 0:
         log = Log()
         log.id = 0
@@ -35,13 +37,9 @@ def logEditar(id=0,tab="geral"):
 
     if request.method == 'POST':
         form = LogForm(formdata=request.form)
+        form.populate_obj(log)
 
-        if form.validate():
-            form.populate_obj(log)
-            if Salvar(log):
-                flash('Salvo com sucesso!', 'success')
-            else:
-                flash('Falha ao salvar!', 'danger')
+        SalvarEntidade(form,log)
     else:
         form = LogForm(obj=log)
 
@@ -49,12 +47,8 @@ def logEditar(id=0,tab="geral"):
 
 
 @logs.route('/remover/<int:id>', methods=('GET', 'POST'))
-def logRemover(id):
+def Remover(id):
     log = Log.query.filter(Log.id == id).first()
-    if Remover(log):
-        flash('Removido com sucesso!', 'success')
-    else:
-        flash('Falha ao remover!', 'danger')
-    logs = log.query.all()
-    return render_template('listarLogs.html', listagem=logs)
+    RemoverEntidade(log)
+    return redirect(url_for('.Listar'))
 

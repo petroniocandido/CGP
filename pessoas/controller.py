@@ -9,7 +9,9 @@ from wtforms import StringField, HiddenField, SelectField, FormField, BooleanFie
 from wtforms.fields.html5 import DateField
 from wtforms.validators import DataRequired, Length, Optional
 
-from DomainModel import db, Pessoa, Salvar, Remover, EstadoCivil, TipoServidor, SituacaoServidor, \
+from ControllerBase import SalvarEntidade,RemoverEntidade
+
+from DomainModel import Pessoa, EstadoCivil, TipoServidor, SituacaoServidor, \
     UF, JornadaTrabalho, Sexo, TipoSanguineo, TipoContaBancaria, Telefone, Endereco, Cargo, Titulo, Titulacao, Perfil
 
 pessoas = Blueprint('pessoas', __name__)
@@ -48,7 +50,7 @@ class PessoaForm(ModelForm):
 
 
 @pessoas.route('/listar/', methods=('GET', 'POST'))
-def pessoasListar():
+def Listar():
     pessoa = Pessoa()
     if request.method == 'GET':
         pessoas = Pessoa.query.order_by(Pessoa.nome).all()
@@ -62,7 +64,7 @@ def pessoasListar():
 
 
 @pessoas.route('/editar/<int:id>', methods=('GET', 'POST'))
-def pessoaEditar(id=0):
+def Editar(id=0):
     if id == 0:
         pessoa = Pessoa()
         pessoa.id = 0
@@ -75,14 +77,7 @@ def pessoaEditar(id=0):
         if form.senha.data is not None:
             pessoa.set_senha(form.senha.data)
 
-        if form.validate():
-
-            if Salvar(pessoa):
-                flash('Salvo com sucesso!', 'success')
-            else:
-                flash('Falha ao salvar!', 'danger')
-        else:
-            flash('Falha ao salvar!' + str(form.errors), 'danger')
+            SalvarEntidade(form,pessoa)
     else:
         form = PessoaForm(obj=pessoa)
 
@@ -90,10 +85,7 @@ def pessoaEditar(id=0):
 
 
 @pessoas.route('/remover/<int:id>', methods=('GET', 'POST'))
-def pessoaRemover(id):
+def Remover(id):
     pessoa = Pessoa.query.filter(Pessoa.id == id).first()
-    if Remover(pessoa):
-        flash('Removido com sucesso!', 'success')
-    else:
-        flash('Falha ao remover!', 'danger')
-    return redirect(url_for('.pessoaListar'))
+    RemoverEntidade(pessoa)
+    return redirect(url_for('.Listar'))

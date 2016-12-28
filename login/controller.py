@@ -31,7 +31,7 @@ def efetuarLogin():
                     session["usuario_id"] = pessoa.id
                     session["usuario_nome"] = pessoa.email_Institucional
                     appendLog(TipoLog.SUCESSO,"Login bem sucedido",pessoa)
-                    return redirect(url_for('pessoas.pessoasListar'))
+                    return redirect(url_for('pessoas.Listar'))
                 else:
                     appendLog(TipoLog.ERRO, "Senha incorreta: " + form.login.data, None)
                     flash('E-mail ou senha incorretos!', 'danger')

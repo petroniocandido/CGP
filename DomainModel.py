@@ -25,15 +25,37 @@ def Salvar(obj):
         db.session.commit()
         return True
     except Exception as inst:
-        print("ERRO SQLALCHEMY:")
-        print(inst)
         db.session.rollback()
+        appendLogInterno(TipoLog.ERROGRAVE, obj, inst)
         return False
 
 
 def Remover(obj):
     try:
         db.session.delete(obj)
+        db.session.commit()
+        return True
+    except Exception as inst:
+        db.session.rollback()
+        appendLogInterno(TipoLog.ERROGRAVE,obj,inst)
+        return False
+
+
+def appendLogInterno(tipo,obj,ex):
+    try:
+        log = Log()
+        log.data = datetime.datetime.now()
+
+        if obj is not None:
+            log.entidade = type(obj).__name__
+            log.entidade_id = obj.id
+        else:
+            log.entidade = ''
+            log.entidade_id = 0
+        log.url = type(ex).__name__
+        log.descricao = str(ex)
+        log.tipo = (tipo.value)
+        db.session.add(log)
         db.session.commit()
         return True
     except Exception as inst:
@@ -48,7 +70,7 @@ def appendLog(tipo, descricao,obj):
         if session["usuario_id"] is not None:
             log.pessoa = Pessoa.query.get(int(session["usuario_id"]))
         if obj is not None:
-            log.entidade = type(obj)
+            log.entidade = type(obj).__name__
             log.entidade_id = obj.id
         else:
             log.entidade = ''
