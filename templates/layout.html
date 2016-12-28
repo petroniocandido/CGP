@@ -59,7 +59,7 @@
               <ul class="dropdown-menu">
                 <li><a href="/perfis/listar">Perfis</a></li>
                 <li><a href="/permissoes/listar">Permissões</a></li>
-                <li><a href="#">Logs</a></li>
+                <li><a href="/logs/listar">Logs</a></li>
               </ul>
             </li>
             <li class="dropdown">
@@ -72,6 +72,9 @@
               </ul>
             </li>
           </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="active"><a href="/pessoas/editar/{{ session["usuario_id"]  }}">{{ session["usuario_nome"]  }}</a></li>
+            </ul>
         </div><!--/.nav-collapse -->
       </div>
     </nav>
