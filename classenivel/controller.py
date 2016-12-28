@@ -8,7 +8,7 @@ from wtforms import StringField, HiddenField, SelectField
 from wtforms.validators import DataRequired
 from wtforms_alchemy import ModelForm
 
-from ControllerBase import SalvarEntidade, RemoverEntidade, logsAuditoria
+from ControllerBase import SalvarEntidade, RemoverEntidade, logsAuditoria, requer_autenticacao_autorizacao
 from DomainModel import ClasseNivel, TipoServidor
 
 classenivel = Blueprint('classenivel', __name__)
@@ -21,12 +21,14 @@ class ClasseNivelForm(ModelForm):
 
 
 @classenivel.route('/listar/')
+@requer_autenticacao_autorizacao
 def Listar():
     classes = ClasseNivel.query.all()
     return render_template('listarClasseNivel.html', listagem=classes, TS=TipoServidor.__members__)
 
 
 @classenivel.route('/editar/<int:id>', methods=('GET', 'POST'))
+@requer_autenticacao_autorizacao
 def Editar(id=0):
     if id == 0:
         classenivel = ClasseNivel()
@@ -46,6 +48,7 @@ def Editar(id=0):
 
 
 @classenivel.route('/remover/<int:id>', methods=('GET', 'POST'))
+@requer_autenticacao_autorizacao
 def Remover(id):
     classenivel = ClasseNivel.query.filter(ClasseNivel.id == id).first()
     RemoverEntidade(classenivel)

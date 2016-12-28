@@ -1,17 +1,49 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-from flask import Flask, render_template, request, flash
-from flask import Blueprint
-from flask_wtf import Form
-from wtforms import StringField, HiddenField, SelectField
-from wtforms.validators import DataRequired
-from wtforms_alchemy import ModelForm
-
-from DomainModel import db, Log, appendLog, TipoLog, Salvar, Remover
+from flask import flash,session, redirect, url_for, request
+from functools import wraps
+from DomainModel import db, Log, appendLog, TipoLog, Salvar, Remover, Pessoa
 
 
-def SalvarEntidade(obj, mensagem):
+def requer_autenticacao(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if session["usuario_id"] is None:
+            #return redirect(url_for("login.login"))
+            return redirect('login/login')
+        session["ultima_url"] = request.path
+        return f(*args, **kwargs)
+    return decorated
+
+
+def requer_autenticacao_autorizacao(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if session["usuario_id"] is None:
+            return redirect('login/login')
+        tmppath = request.path[:request.path.rindex('/')+1]
+        if tmppath not in usuarioPermissoes():
+            flash('Acesso não autorizado!','danger')
+            return redirect(session["ultima_url"])
+        session["ultima_url"] = request.path
+        return f(*args, **kwargs)
+    return decorated
+
+
+def usuarioLogado():
+    if session["usuario_id"] is not None:
+        return Pessoa.query.filter(Pessoa.id == int(session["usuario_id"])).first()
+    else:
+        return None
+
+
+def usuarioPermissoes():
+    permissoes = [k.url for k in usuarioLogado().perfil.permissoes]
+    return permissoes
+
+
+def SalvarEntidadeSimples(obj, mensagem):
     if Salvar(obj):
         appendLog(TipoLog.SUCESSO, mensagem + " realizada", obj)
         flash('Salvo com sucesso!', 'success')
@@ -20,7 +52,7 @@ def SalvarEntidade(obj, mensagem):
         flash('Falha ao salvar!', 'danger')
 
 
-def RemoverEntidade(obj, mensagem):
+def RemoverEntidadeSimples(obj, mensagem):
     if Remover(obj):
         appendLog(TipoLog.SUCESSO, mensagem + " realizada", obj)
         flash('Salvo com sucesso!', 'success')

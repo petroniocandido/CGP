@@ -8,7 +8,7 @@ from wtforms import StringField, HiddenField
 from wtforms.validators import DataRequired
 from wtforms_alchemy import ModelForm
 
-from ControllerBase import SalvarEntidade, RemoverEntidade, logsAuditoria
+from ControllerBase import SalvarEntidade, RemoverEntidade, logsAuditoria, requer_autenticacao, requer_autenticacao_autorizacao
 
 from DomainModel import Campus
 
@@ -22,12 +22,14 @@ class CampusForm(ModelForm):
 
 
 @campus.route('/listar/')
+@requer_autenticacao_autorizacao
 def Listar():
     campi = Campus.query.all()
     return render_template('listarCampus.html', listagem=campi)
 
 
 @campus.route('/editar/<int:id>', methods=('GET', 'POST'))
+@requer_autenticacao_autorizacao
 def Editar(id=0):
     if id == 0:
         campus = Campus()
@@ -46,6 +48,7 @@ def Editar(id=0):
 
 
 @campus.route('/remover/<int:id>', methods=('GET', 'POST'))
+@requer_autenticacao_autorizacao
 def Remover(id):
     campus = Campus.query.filter(Campus.id == id).first()
     RemoverEntidade(campus)

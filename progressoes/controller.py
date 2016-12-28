@@ -9,7 +9,7 @@ from wtforms import StringField, HiddenField, SelectField, FormField, BooleanFie
 from wtforms.fields.html5 import DateField
 from wtforms.validators import DataRequired, Length, Optional
 
-from ControllerBase import SalvarEntidade, RemoverEntidade, logsAuditoria
+from ControllerBase import SalvarEntidade, RemoverEntidade, logsAuditoria, requer_autenticacao_autorizacao
 from DomainModel import Pessoa, Progressao, ClasseNivel
 
 progressoes = Blueprint('progressoes', __name__)
@@ -25,6 +25,7 @@ class ProgressaoForm(ModelForm):
 
 
 @progressoes.route('/editar/<int:pessoa_id>,<int:progressao_id>', methods=('GET', 'POST'))
+@requer_autenticacao_autorizacao
 def Editar(pessoa_id=0, progressao_id=0):
     if progressao_id == 0:
         progressao = Progressao()
@@ -44,6 +45,7 @@ def Editar(pessoa_id=0, progressao_id=0):
 
 
 @progressoes.route('/remover/<int:id>', methods=('GET', 'POST'))
+@requer_autenticacao_autorizacao
 def Remover(id):
     progressao = Progressao.query.filter(Progressao.id == id).first()
     pessoa_id = progressao.pessoa_id

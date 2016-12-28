@@ -9,7 +9,7 @@ from wtforms import StringField, HiddenField, SelectField, FormField, BooleanFie
 from wtforms.fields.html5 import DateField
 from wtforms.validators import DataRequired, Length, Optional
 
-from ControllerBase import SalvarEntidade,RemoverEntidade, logsAuditoria
+from ControllerBase import SalvarEntidade,RemoverEntidade, logsAuditoria, requer_autenticacao_autorizacao
 from DomainModel import Pessoa, Titulo
 
 titulos = Blueprint('titulos', __name__)
@@ -22,6 +22,7 @@ class TituloForm(ModelForm):
 
 
 @titulos.route('/editar/<int:pessoa_id>,<int:titulo_id>', methods=('GET', 'POST'))
+@requer_autenticacao_autorizacao
 def Editar(pessoa_id=0, titulo_id=0):
     if titulo_id == 0:
         titulo = Titulo()
@@ -42,6 +43,7 @@ def Editar(pessoa_id=0, titulo_id=0):
 
 
 @titulos.route('/remover/<int:id>', methods=('GET', 'POST'))
+@requer_autenticacao_autorizacao
 def Remover(id):
     titulo = Titulo.query.filter(Titulo.id == id).first()
     pessoa_id = titulo.pessoa_id

@@ -8,7 +8,7 @@ from wtforms import StringField, HiddenField, SelectField
 from wtforms.validators import DataRequired
 from wtforms_alchemy import ModelForm
 
-from ControllerBase import SalvarEntidade,RemoverEntidade, logsAuditoria
+from ControllerBase import SalvarEntidade,RemoverEntidade, logsAuditoria, SalvarEntidadeSimples, requer_autenticacao_autorizacao
 
 from DomainModel import Perfil, Permissao
 
@@ -23,6 +23,7 @@ class PerfilForm(ModelForm):
 
 
 @perfis.route('/listar/')
+@requer_autenticacao_autorizacao
 def Listar():
     perfis = Perfil.query.all()
     return render_template('listarPerfis.html', listagem=perfis)
@@ -30,6 +31,7 @@ def Listar():
 
 @perfis.route('/editar/<int:id>', methods=('GET', 'POST'))
 @perfis.route('/editar/<int:id>,<string:tab>', methods=('GET', 'POST'))
+@requer_autenticacao_autorizacao
 def Editar(id=0,tab="geral"):
     if id == 0:
         perfil = Perfil()
@@ -50,6 +52,7 @@ def Editar(id=0,tab="geral"):
 
 
 @perfis.route('/remover/<int:id>', methods=('GET', 'POST'))
+@requer_autenticacao_autorizacao
 def Remover(id):
     perfil = Perfil.query.filter(Perfil.id == id).first()
     RemoverEntidade(perfil)
@@ -57,24 +60,26 @@ def Remover(id):
 
 
 @perfis.route('/addPermissao/<int:id>,<int:perm>', methods=('GET','POST'))
+@requer_autenticacao_autorizacao
 def perfilAddPermissao(id=0,perm=0):
     perfil = Perfil.query.get_or_404(id)
     permissao = Permissao.query.get_or_404(perm)
 
     perfil.permissoes.append(permissao)
 
-    SalvarEntidade(perfil,"Adicionar permissão")
+    SalvarEntidadeSimples(perfil,"Adicionar permissão " + permissao.url)
 
     return redirect(url_for('.Editar', id=id, tab="permissoes"))
 
 
 @perfis.route('/removePermissao/<int:id>,<int:perm>', methods=('GET','POST'))
+@requer_autenticacao_autorizacao
 def perfilRemovePermissao(id=0,perm=0):
     perfil = Perfil.query.get_or_404(id)
     permissao = Permissao.query.get_or_404(perm)
 
     perfil.permissoes.remove(permissao)
 
-    RemoverEntidade(perfil,"Remover permissão")
+    SalvarEntidadeSimples(perfil, "Remover permissão " + permissao.url)
 
     return redirect(url_for('.Editar', id=id, tab="permissoes"))

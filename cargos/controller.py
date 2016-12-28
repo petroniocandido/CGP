@@ -8,7 +8,7 @@ from wtforms import StringField, HiddenField, SelectField
 from wtforms.validators import DataRequired
 from wtforms_alchemy import ModelForm
 
-from ControllerBase import SalvarEntidade, RemoverEntidade,logsAuditoria
+from ControllerBase import SalvarEntidade, RemoverEntidade,logsAuditoria,requer_autenticacao, requer_autenticacao_autorizacao
 
 from DomainModel import Cargo, TipoServidor
 
@@ -22,12 +22,14 @@ class CargoForm(ModelForm):
 
 
 @cargos.route('/listar/')
+@requer_autenticacao_autorizacao
 def Listar():
     cargos = Cargo.query.all()
     return render_template('listarCargos.html', listagem=cargos, TS=TipoServidor.__members__)
 
 
 @cargos.route('/editar/<int:id>', methods=('GET', 'POST'))
+@requer_autenticacao_autorizacao
 def Editar(id=0):
     if id == 0:
         cargos = Cargo()
@@ -48,6 +50,7 @@ def Editar(id=0):
 
 
 @cargos.route('/remover/<int:id>', methods=('GET', 'POST'))
+@requer_autenticacao_autorizacao
 def Remover(id):
     cargos = Cargo.query.filter(Cargo.id == id).first()
     RemoverEntidade(cargos)

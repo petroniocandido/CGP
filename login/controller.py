@@ -7,6 +7,7 @@ from flask_wtf import Form
 from wtforms import StringField, HiddenField, SelectField, PasswordField
 from wtforms.validators import DataRequired
 
+from ControllerBase import usuarioLogado
 from DomainModel import TipoLog, Log, Pessoa, Salvar, Remover, appendLog
 
 login = Blueprint('login', __name__)
@@ -38,4 +39,14 @@ def efetuarLogin():
     else:
         form = LoginForm()
 
+    return render_template('login.html', form=form)
+
+
+@login.route('/logout/', methods=('GET','POST'))
+def efetuarLogout():
+    pessoa = usuarioLogado()
+    appendLog(TipoLog.SUCESSO, "Logout bem sucedido", pessoa)
+    form = LoginForm()
+    session["usuario_id"] = None
+    session["usuario_nome"] = None
     return render_template('login.html', form=form)

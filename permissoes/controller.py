@@ -8,7 +8,7 @@ from wtforms import StringField, HiddenField, SelectField
 from wtforms.validators import DataRequired
 from wtforms_alchemy import ModelForm
 
-from ControllerBase import SalvarEntidade,RemoverEntidade,logsAuditoria
+from ControllerBase import SalvarEntidade,RemoverEntidade,logsAuditoria, requer_autenticacao_autorizacao
 
 from DomainModel import Permissao
 
@@ -22,12 +22,14 @@ class PermissaoForm(ModelForm):
 
 
 @permissoes.route('/listar/')
+@requer_autenticacao_autorizacao
 def Listar():
     permissoes = Permissao.query.all()
     return render_template('listarPermissoes.html', listagem=permissoes)
 
 
 @permissoes.route('/editar/<int:id>', methods=('GET', 'POST'))
+@requer_autenticacao_autorizacao
 def Editar(id=0):
     if id == 0:
         permissao = Permissao()
@@ -47,6 +49,7 @@ def Editar(id=0):
 
 
 @permissoes.route('/remover/<int:id>', methods=('GET', 'POST'))
+@requer_autenticacao_autorizacao
 def Remover(id):
     permissao = Permissao.query.filter(Permissao.id == id).first()
     RemoverEntidade(permissao)

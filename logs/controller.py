@@ -8,7 +8,7 @@ from wtforms import StringField, HiddenField, SelectField
 from wtforms.validators import DataRequired
 from wtforms_alchemy import ModelForm
 
-from ControllerBase import SalvarEntidade,RemoverEntidade
+from ControllerBase import SalvarEntidade,RemoverEntidade, requer_autenticacao_autorizacao
 
 from DomainModel import Log
 
@@ -22,12 +22,14 @@ class LogForm(ModelForm):
     
 
 @logs.route('/listar/')
+@requer_autenticacao_autorizacao
 def Listar():
     logs = Log.query.order_by(Log.data).all()
     return render_template('listarLogs.html', listagem=logs)
 
 
 @logs.route('/editar/<int:id>', methods=('GET', 'POST'))
+@requer_autenticacao_autorizacao
 def Editar(id=0,tab="geral"):
     if id == 0:
         log = Log()
@@ -47,6 +49,7 @@ def Editar(id=0,tab="geral"):
 
 
 @logs.route('/remover/<int:id>', methods=('GET', 'POST'))
+@requer_autenticacao_autorizacao
 def Remover(id):
     log = Log.query.filter(Log.id == id).first()
     RemoverEntidade(log)

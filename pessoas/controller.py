@@ -9,7 +9,7 @@ from wtforms import StringField, HiddenField, SelectField, FormField, BooleanFie
 from wtforms.fields.html5 import DateField
 from wtforms.validators import DataRequired, Length, Optional
 
-from ControllerBase import SalvarEntidade,RemoverEntidade, logsAuditoria
+from ControllerBase import SalvarEntidade,RemoverEntidade, logsAuditoria, requer_autenticacao, requer_autenticacao_autorizacao
 
 from DomainModel import Pessoa, EstadoCivil, TipoServidor, SituacaoServidor, \
     UF, JornadaTrabalho, Sexo, TipoSanguineo, TipoContaBancaria, Telefone, Endereco, Cargo, Titulo, Titulacao, Perfil
@@ -50,6 +50,7 @@ class PessoaForm(ModelForm):
 
 
 @pessoas.route('/listar/', methods=('GET', 'POST'))
+@requer_autenticacao
 def Listar():
     pessoa = Pessoa()
     if request.method == 'GET':
@@ -64,6 +65,7 @@ def Listar():
 
 
 @pessoas.route('/editar/<int:id>', methods=('GET', 'POST'))
+@requer_autenticacao_autorizacao
 def Editar(id=0):
     if id == 0:
         pessoa = Pessoa()
@@ -73,11 +75,14 @@ def Editar(id=0):
 
     if request.method == 'POST':
         form = PessoaForm(formdata=request.form)
+        pwd = pessoa.senha
         form.populate_obj(pessoa)
-        if form.senha.data is not None:
+        if form.senha.data is not None and len(form.senha.data) > 0:
             pessoa.set_senha(form.senha.data)
+        else:
+            pessoa.senha = pwd
 
-            SalvarEntidade(form,pessoa)
+        SalvarEntidade(form,pessoa)
     else:
         form = PessoaForm(obj=pessoa)
 
@@ -86,6 +91,7 @@ def Editar(id=0):
 
 
 @pessoas.route('/remover/<int:id>', methods=('GET', 'POST'))
+@requer_autenticacao_autorizacao
 def Remover(id):
     pessoa = Pessoa.query.filter(Pessoa.id == id).first()
     RemoverEntidade(pessoa)

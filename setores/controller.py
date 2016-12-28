@@ -8,7 +8,7 @@ from wtforms import StringField, HiddenField, SelectField
 from wtforms.validators import DataRequired
 from wtforms_alchemy import ModelForm
 
-from ControllerBase import SalvarEntidade, RemoverEntidade, logsAuditoria
+from ControllerBase import SalvarEntidade, RemoverEntidade, logsAuditoria, requer_autenticacao_autorizacao
 from DomainModel import Setor, Campus
 
 setores = Blueprint('setores', __name__)
@@ -23,12 +23,14 @@ class SetorForm(ModelForm):
 
 
 @setores.route('/listar/')
+@requer_autenticacao_autorizacao
 def Listar():
     setores = Setor.query.all()
     return render_template('listarSetores.html', listagem=setores)
 
 
 @setores.route('/editar/<int:id>', methods=('GET', 'POST'))
+@requer_autenticacao_autorizacao
 def Editar(id=0):
     if id == 0:
         setor = Setor()
@@ -48,6 +50,7 @@ def Editar(id=0):
 
 
 @setores.route('/remover/<int:id>', methods=('GET', 'POST'))
+@requer_autenticacao_autorizacao
 def Remover(id):
     setor = Setor.query.filter(Setor.id == id).first()
     RemoverEntidade(setor)
