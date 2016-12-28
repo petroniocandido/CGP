@@ -1,5 +1,5 @@
 {% extends "layoutForm.html" %}
-{% from "_formhelpers.html" import render_hidden,render_label,render_field,botoes_entidade,render_inline %}
+{% from "_formhelpers.html" import render_hidden,render_label,render_field,botoes_entidade,render_inline,tab_auditoria %}
 {% block action %}{{form.pessoa_id.data}},{{form.id.data}}{% endblock %}
 {%block titulo %}Editar Progressão{% endblock %}
 {% block formulario %}
@@ -25,9 +25,7 @@
     </dl>
   </div>
   
-  <div id="auditoria" class="tab-pane fade">
-    
-  </div>
+  {{ tab_auditoria(auditoria) }}
   
 <button type="submit" class="btn btn-primary btn-lg" >Salvar</button>
 <a href="/progressoes/remover/{{ form.id.data }}" class="btn btn-danger btn-lg">Apagar</a>

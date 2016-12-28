@@ -8,7 +8,7 @@ from wtforms import StringField, HiddenField, SelectField
 from wtforms.validators import DataRequired
 from wtforms_alchemy import ModelForm
 
-from ControllerBase import SalvarEntidade, RemoverEntidade
+from ControllerBase import SalvarEntidade, RemoverEntidade,logsAuditoria
 
 from DomainModel import Cargo, TipoServidor
 
@@ -44,7 +44,7 @@ def Editar(id=0):
     else:
         form = CargoForm(obj=cargos)
 
-    return render_template('editarCargo.html', form=form)
+    return render_template('editarCargo.html', form=form, auditoria = logsAuditoria(cargos))
 
 
 @cargos.route('/remover/<int:id>', methods=('GET', 'POST'))

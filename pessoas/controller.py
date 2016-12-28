@@ -9,7 +9,7 @@ from wtforms import StringField, HiddenField, SelectField, FormField, BooleanFie
 from wtforms.fields.html5 import DateField
 from wtforms.validators import DataRequired, Length, Optional
 
-from ControllerBase import SalvarEntidade,RemoverEntidade
+from ControllerBase import SalvarEntidade,RemoverEntidade, logsAuditoria
 
 from DomainModel import Pessoa, EstadoCivil, TipoServidor, SituacaoServidor, \
     UF, JornadaTrabalho, Sexo, TipoSanguineo, TipoContaBancaria, Telefone, Endereco, Cargo, Titulo, Titulacao, Perfil
@@ -81,7 +81,8 @@ def Editar(id=0):
     else:
         form = PessoaForm(obj=pessoa)
 
-    return render_template('editarPessoa.html', form=form, titulos=pessoa.titulos, TIT=Titulacao.__members__)
+    return render_template('editarPessoa.html', form=form, titulos=pessoa.titulos, TIT=Titulacao.__members__,
+                           auditoria = logsAuditoria(pessoa))
 
 
 @pessoas.route('/remover/<int:id>', methods=('GET', 'POST'))

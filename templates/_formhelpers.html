@@ -135,3 +135,28 @@
   </div>
 </div>
 {% endmacro %}
+
+{% macro tab_auditoria(logs) %}
+ <div id="auditoria" class="tab-pane fade">
+        <table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Data</th>
+				<th>Usuário</th>
+				<th>Registro</th>
+				<th>Detalhes</th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for obj in logs %}
+			<tr>
+				<td>{{ obj.data }}</td>
+				<td>{{ obj.pessoa.email_Institucional }}</td>
+				<td>{{ obj.descricao }}</td>
+				<td> <a href="/logs/editar/{{ obj.id }}">Detalhes</a> </td>
+			</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+  </div>
+{% endmacro %}

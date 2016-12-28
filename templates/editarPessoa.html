@@ -1,5 +1,6 @@
 {% extends "layoutForm.html" %}
-{% from "_formhelpers.html" import render_hidden,render_label,render_field,botoes_entidade,render_inline,render_multiple %}
+{% from "_formhelpers.html" import render_hidden,render_label,render_field,botoes_entidade,
+render_inline,render_multiple, tab_auditoria %}
 {% block action %}{{form.id.data}}{% endblock %}
 {%block titulo %}Editar Servidor{% endblock %}
 {% block formulario %}
@@ -16,7 +17,8 @@
   <li><a data-toggle="tab" href="#progressoes">Progressões</a></li>
   <li><a data-toggle="tab" href="#cdfg">Cargos/Funções Gratificadas</a></li>
   <li><a data-toggle="tab" href="#ferias">Férias</a></li>
-    <li><a data-toggle="tab" href="#seguranca">Segurança</a></li>
+  <li><a data-toggle="tab" href="#seguranca">Segurança</a></li>
+    <li><a data-toggle="tab" href="#auditoria">Auditoria</a></li>
 </ul>
 
 <div class="tab-content">
@@ -173,6 +175,8 @@
         {{ render_field(form.senha) }}
         {{ render_field(form.perfil_id) }}
   </div>
+
+  {{ tab_auditoria(auditoria) }}
   
   {{ botoes_entidade("pessoas",form.id.data) }}
   

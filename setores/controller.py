@@ -8,7 +8,7 @@ from wtforms import StringField, HiddenField, SelectField
 from wtforms.validators import DataRequired
 from wtforms_alchemy import ModelForm
 
-from ControllerBase import SalvarEntidade, RemoverEntidade
+from ControllerBase import SalvarEntidade, RemoverEntidade, logsAuditoria
 from DomainModel import Setor, Campus
 
 setores = Blueprint('setores', __name__)
@@ -44,7 +44,7 @@ def Editar(id=0):
     else:
         form = SetorForm(obj=setor)
 
-    return render_template('editarSetor.html', form=form)
+    return render_template('editarSetor.html', form=form, auditoria = logsAuditoria(setor))
 
 
 @setores.route('/remover/<int:id>', methods=('GET', 'POST'))

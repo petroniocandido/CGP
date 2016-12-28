@@ -1,5 +1,5 @@
 {% extends "layoutForm.html" %}
-{% from "_formhelpers.html" import render_hidden,render_label,render_field,botoes_entidade %}
+{% from "_formhelpers.html" import render_hidden,render_label,render_field,botoes_entidade,tab_auditoria %}
 {% block action %}{{form.id.data}}{% endblock %}
 {%block titulo %}Editar Cargo{% endblock %}
 {% block formulario %}
@@ -20,9 +20,7 @@
     </dl>
   </div>
   
-  <div id="auditoria" class="tab-pane fade">
-    
-  </div>
+  {{ tab_auditoria(auditoria) }}
   
 {{ botoes_entidade("cargos",form.id.data) }}
 

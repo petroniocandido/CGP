@@ -8,7 +8,7 @@ from wtforms import StringField, HiddenField, SelectField
 from wtforms.validators import DataRequired
 from wtforms_alchemy import ModelForm
 
-from DomainModel import db, appendLog, TipoLog, Salvar, Remover
+from DomainModel import db, Log, appendLog, TipoLog, Salvar, Remover
 
 
 def SalvarEntidade(obj, mensagem):
@@ -50,3 +50,9 @@ def RemoverEntidade(obj):
     else:
         appendLog(TipoLog.ERRO, "Registro não removido!", obj)
         flash('Falha ao remover!', 'danger')
+
+
+def logsAuditoria(obj):
+    logs = Log.query.filter(Log.entidade == type(obj).__name__ and  Log.entidade_id == obj.id)\
+        .order_by(Log.data.desc()).limit(30)
+    return logs

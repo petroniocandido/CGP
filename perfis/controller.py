@@ -8,7 +8,7 @@ from wtforms import StringField, HiddenField, SelectField
 from wtforms.validators import DataRequired
 from wtforms_alchemy import ModelForm
 
-from ControllerBase import SalvarEntidade,RemoverEntidade
+from ControllerBase import SalvarEntidade,RemoverEntidade, logsAuditoria
 
 from DomainModel import Perfil, Permissao
 
@@ -46,7 +46,7 @@ def Editar(id=0,tab="geral"):
     else:
         form = PerfilForm(obj=perfil)
 
-    return render_template('editarPerfil.html', tab=tab, form=form, permissoes=perfil.permissoes)
+    return render_template('editarPerfil.html', tab=tab, form=form, permissoes=perfil.permissoes, auditoria = logsAuditoria(perfil))
 
 
 @perfis.route('/remover/<int:id>', methods=('GET', 'POST'))
