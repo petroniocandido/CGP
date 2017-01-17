@@ -50,4 +50,4 @@ def Remover(id):
     progressao = Progressao.query.filter(Progressao.id == id).first()
     pessoa_id = progressao.pessoa_id
     RemoverEntidade(progressao)
-    return redirect(url_for('pessoas.Editar', id=pessoa_id))
+    return redirect(url_for('pessoas.Editar', id=pessoa_id, tab='progressoes'))

@@ -15,11 +15,17 @@
   <div id="geral" class="tab-pane fade in active">
     <dl>
 	{{ render_label(form.id) }}
-    {{ render_field(form.url) }}
+      {{ render_label(form.tipo) }}
+      {{ render_label(form.data) }}
+      {{ render_label(pessoa) }}
+    {{ render_label(form.url) }}
+      {{ render_label(form.descricao) }}
+      {{ render_label(form.entidade) }}
+      {{ render_label(form.entidade_id) }}
     </dl>
   </div>
 
-{{ botoes_entidade("permissoes",form.id.data) }}
+{{ botoes_entidade("logs",form.id.data) }}
 
 </div>
 {% endblock %}

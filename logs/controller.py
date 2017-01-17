@@ -10,7 +10,7 @@ from wtforms_alchemy import ModelForm
 
 from ControllerBase import SalvarEntidade,RemoverEntidade, requer_autenticacao_autorizacao
 
-from DomainModel import Log
+from DomainModel import Log, Pessoa
 
 logs = Blueprint('logs', __name__)
 
@@ -24,7 +24,7 @@ class LogForm(ModelForm):
 @logs.route('/listar/')
 @requer_autenticacao_autorizacao
 def Listar():
-    logs = Log.query.order_by(Log.data).all()
+    logs = Log.query.order_by(Log.data.desc()).all()
     return render_template('listarLogs.html', listagem=logs)
 
 
@@ -45,7 +45,12 @@ def Editar(id=0,tab="geral"):
     else:
         form = LogForm(obj=log)
 
-    return render_template('editarLog.html', tab=tab, form=form)
+    if log.pessoa_id != 0:
+        pessoa = Pessoa.query.get(log.pessoa_id)
+    else:
+        pessoa = None
+
+    return render_template('editarLog.html', tab=tab, form=form, pessoa = pessoa)
 
 
 @logs.route('/remover/<int:id>', methods=('GET', 'POST'))

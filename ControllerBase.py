@@ -43,6 +43,9 @@ def usuarioPermissoes():
     return permissoes
 
 
+def checarPermissaoUsuario(url):
+    return url in usuarioPermissoes()
+
 def SalvarEntidadeSimples(obj, mensagem):
     if Salvar(obj):
         appendLog(TipoLog.SUCESSO, mensagem + " realizada", obj)

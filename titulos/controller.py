@@ -48,4 +48,4 @@ def Remover(id):
     titulo = Titulo.query.filter(Titulo.id == id).first()
     pessoa_id = titulo.pessoa_id
     RemoverEntidade(titulo)
-    return redirect(url_for('pessoas.Editar', id=pessoa_id))
+    return redirect(url_for('pessoas.Editar', id=pessoa_id, tab="titulos"))

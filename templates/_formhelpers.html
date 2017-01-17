@@ -1,10 +1,6 @@
-{% macro isactive_li(parameter, value) %}
-  {% if parameter == value %} class="active" {% endif %}
-{% endmacro %}
+{% macro isactive_li(parameter, value) %}{% if parameter == value %} class="active" {% endif %}{% endmacro %}
 
-{% macro isactive_div(parameter, value) %}
-  {% if parameter == value %} active {% endif %}
-{% endmacro %}
+{% macro isactive_div(parameter, value) %}{% if parameter == value %} active {% endif %}{% endmacro %}
 
 {% macro render_field(field) %}
   <div class="form-group">

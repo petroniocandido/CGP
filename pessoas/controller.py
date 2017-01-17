@@ -42,10 +42,10 @@ class PessoaForm(ModelForm):
     endereco = ModelFormField(EnderecoForm)
     cargo_id = SelectField('Cargo', coerce=int, choices=[(c.id, c.nome) for c in Cargo.query.order_by('nome')])
     perfil_id = SelectField('Perfil', coerce=int, choices=[(c.id, c.nome) for c in Perfil.query.order_by('nome')])
-    dataNascimento = DateField("Posse", format="%Y-%m-%d", validators=[Optional()])
-    dataPosse = DateField("Posse", format="%Y-%m-%d", validators=[Optional()])
-    dataExercicio = DateField("Exercício", format="%Y-%m-%d", validators=[Optional()])
-    dataSaida = DateField("Saída", format="%Y-%m-%d", validators=[Optional()])
+    dataNascimento = DateField("Data Nascimento", format="%Y-%m-%d", validators=[Optional()])
+    dataPosse = DateField("Data de Posse", format="%Y-%m-%d", validators=[Optional()])
+    dataExercicio = DateField("Data de Exercício", format="%Y-%m-%d", validators=[Optional()])
+    dataSaida = DateField("Data de Saída", format="%Y-%m-%d", validators=[Optional()])
     senha = PasswordField()
 
 
@@ -65,8 +65,9 @@ def Listar():
 
 
 @pessoas.route('/editar/<int:id>', methods=('GET', 'POST'))
+@pessoas.route('/editar/<int:id>,<string:tab>', methods=('GET', 'POST'))
 @requer_autenticacao_autorizacao
-def Editar(id=0):
+def Editar(id=0,tab="geral"):
     if id == 0:
         pessoa = Pessoa()
         pessoa.id = 0
@@ -86,8 +87,10 @@ def Editar(id=0):
     else:
         form = PessoaForm(obj=pessoa)
 
+    auditoria = logsAuditoria(obj=pessoa)
+
     return render_template('editarPessoa.html', form=form, titulos=pessoa.titulos, TIT=Titulacao.__members__,
-                           auditoria = logsAuditoria(pessoa))
+                           auditoria = auditoria, tab=tab)
 
 
 @pessoas.route('/remover/<int:id>', methods=('GET', 'POST'))

@@ -1,5 +1,5 @@
 {% extends "layoutForm.html" %}
-{% from "_formhelpers.html" import render_hidden,render_label,render_field,botoes_entidade,
+{% from "_formhelpers.html" import isactive_li,isactive_div,render_hidden,render_label,render_field,botoes_entidade,
 render_inline,render_multiple, tab_auditoria %}
 {% block action %}{{form.id.data}}{% endblock %}
 {%block titulo %}Editar Servidor{% endblock %}
@@ -9,21 +9,21 @@ render_inline,render_multiple, tab_auditoria %}
 
 
 <ul class="nav nav-tabs">
-  <li class="active"><a data-toggle="tab" href="#pessoais">Dados Pessoais</a></li>
+  <li {{ isactive_li(tab,'geral') }}><a data-toggle="tab" href="#pessoais">Dados Pessoais</a></li>
   <li><a data-toggle="tab" href="#documentos">Documentos</a></li>
   <li><a data-toggle="tab" href="#funcionais">Dados Funcionais</a></li>
   <li><a data-toggle="tab" href="#endereco">Endereço e Contatos</a></li>
-  <li><a data-toggle="tab" href="#titulos">Títulos</a></li>
-  <li><a data-toggle="tab" href="#progressoes">Progressões</a></li>
-  <li><a data-toggle="tab" href="#cdfg">Cargos/Funções Gratificadas</a></li>
-  <li><a data-toggle="tab" href="#ferias">Férias</a></li>
+  <li {{ isactive_li(tab,'titulos') }}><a data-toggle="tab" href="#titulos">Títulos</a></li>
+  <li {{ isactive_li(tab,'progressoes') }}><a data-toggle="tab" href="#progressoes">Progressões</a></li>
+  <li {{ isactive_li(tab,'cdfg') }}><a data-toggle="tab" href="#cdfg">Cargos/Funções Gratificadas</a></li>
+  <li {{ isactive_li(tab,'ferias') }}><a data-toggle="tab" href="#ferias">Férias</a></li>
   <li><a data-toggle="tab" href="#seguranca">Segurança</a></li>
-    <li><a data-toggle="tab" href="#auditoria">Auditoria</a></li>
+	<li><a data-toggle="tab" href="#auditoria">Auditoria</a></li>
 </ul>
 
 <div class="tab-content">
   
-  <div id="pessoais" class="tab-pane fade in active">
+  <div id="pessoais" class="tab-pane fade in {{ isactive_div(tab,'geral') }}">
 	  {{ render_field(form.nome) }}
 	  {{ render_field(form.dataNascimento) }}
 	  {{ render_field(form.sexo) }}
@@ -115,7 +115,7 @@ render_inline,render_multiple, tab_auditoria %}
     {{ render_multiple(form.endereco) }}
   </div>
   
-  <div id="titulos" class="tab-pane fade">
+  <div id="titulos" class="tab-pane fade {{ isactive_div(tab,'titulos') }}">
 	<a href="/titulos/editar/{{form.id.data}},0" class="btn btn-default btn-lg" role="button">Novo</a>
 	<table class="table table-striped">
 		<thead>
@@ -139,7 +139,7 @@ render_inline,render_multiple, tab_auditoria %}
 	</table>
   </div>
   
-  <div id="progressoes" class="tab-pane fade">
+  <div id="progressoes" class="tab-pane fade {{ isactive_div(tab,'progressoes') }}">
 	<a href="/progressoes/editar/{{form.id.data}},0" class="btn btn-default btn-lg" role="button">Novo</a>
 	<table class="table table-striped">
 		<thead>
@@ -163,11 +163,11 @@ render_inline,render_multiple, tab_auditoria %}
 	</table>
   </div>
   
-  <div id="cdfg" class="tab-pane fade">
+  <div id="cdfg" class="tab-pane fade {{ isactive_div(tab,'cdfg') }}">
     
   </div>
   
-  <div id="ferias" class="tab-pane fade">
+  <div id="ferias" class="tab-pane fade {{ isactive_div(tab,'ferias') }}">
     
   </div>
 
