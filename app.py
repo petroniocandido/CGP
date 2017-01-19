@@ -1,10 +1,16 @@
-from flask import Flask, render_template, url_for, redirect
+from flask import Flask, redirect
+import logging
 
 import sys
+
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
 app = Flask(__name__)
+file_handler = logging.FileHandler(filename='flask.log')
+file_handler.setLevel(logging.NOTSET)
+app.logger.addHandler(file_handler)
+app.logger.info("Iniciando")
 
 app.config['SECRET_KEY'] = "1!aA2@sS3#dD4$fF5%gG"
 
@@ -34,14 +40,15 @@ app.register_blueprint(titulos, url_prefix='/titulos')
 app.register_blueprint(progressoes, url_prefix='/progressoes')
 app.register_blueprint(cdfg, url_prefix='/cdfg')
 
+
 @app.route('/')
 def home():
-	return redirect('login/login')
-	
-	
-if __name__ == '__main__':
-	app.run()
-  
-#url_for('static', filename='local.css')
+    return redirect('login/login')
 
-#app.run()
+
+if __name__ == '__main__':
+    app.run()
+
+# url_for('static', filename='local.css')
+
+# app.run()

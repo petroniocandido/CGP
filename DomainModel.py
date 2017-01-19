@@ -12,7 +12,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:1a2s3d@localhost/CGP'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:root@localhost/CGP'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
 
