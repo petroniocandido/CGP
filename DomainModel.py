@@ -10,6 +10,7 @@ from wtforms.fields.html5 import DateField
 from sqlalchemy_utils import PasswordType
 from werkzeug.security import generate_password_hash, check_password_hash
 
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:root@localhost/CGP'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
@@ -59,7 +60,7 @@ def appendLogInterno(tipo,obj,ex):
         db.session.commit()
         return True
     except Exception as inst:
-        print(inst)
+        #print(inst)
         db.session.rollback()
         return False
 
@@ -82,7 +83,7 @@ def appendLog(tipo, descricao,obj):
         db.session.commit()
         return True
     except Exception as inst:
-        print(inst)
+        #print(inst)
         db.session.rollback()
         return False
 
