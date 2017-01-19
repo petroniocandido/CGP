@@ -116,7 +116,7 @@ render_inline,render_multiple, tab_auditoria %}
   </div>
   
   <div id="titulos" class="tab-pane fade {{ isactive_div(tab,'titulos') }}">
-	<a href="/titulos/editar/{{form.id.data}},0" class="btn btn-default btn-lg" role="button">Novo</a>
+	<a href="/CGP/titulos/editar/{{form.id.data}},0" class="btn btn-default btn-lg" role="button">Novo</a>
 	<table class="table table-striped">
 		<thead>
 		  <tr>
@@ -132,7 +132,7 @@ render_inline,render_multiple, tab_auditoria %}
 			<td>{{ TIT[obj.titulo].value }}</td>
 			<td>{{ obj.area }}</td>
 			<td>{{ obj.instituicao }}</td>
-			<td> <a href="/titulos/editar/{{form.id.data}},{{ obj.id }}">Editar</a> </td>
+			<td> <a href="/CGP/titulos/editar/{{form.id.data}},{{ obj.id }}">Editar</a> </td>
 		  </tr>
 		  {% endfor %}
 		</tbody>
@@ -140,7 +140,7 @@ render_inline,render_multiple, tab_auditoria %}
   </div>
   
   <div id="progressoes" class="tab-pane fade {{ isactive_div(tab,'progressoes') }}">
-	<a href="/progressoes/editar/{{form.id.data}},0" class="btn btn-default btn-lg" role="button">Novo</a>
+	<a href="/CGP/progressoes/editar/{{form.id.data}},0" class="btn btn-default btn-lg" role="button">Novo</a>
 	<table class="table table-striped">
 		<thead>
 			<tr>
@@ -156,7 +156,7 @@ render_inline,render_multiple, tab_auditoria %}
 				<td>{{ obj.classenivel }}</td>
 				<td>{{ obj.dataInicio }}</td>
 				<td>{{ obj.dataTermino }}</td>
-				<td> <a href="/progressoes/editar/{{form.id.data}},{{ obj.id }}">Editar</a> </td>
+				<td> <a href="/CGP/progressoes/editar/{{form.id.data}},{{ obj.id }}">Editar</a> </td>
 			</tr>
 		{% endfor %}
 		</tbody>

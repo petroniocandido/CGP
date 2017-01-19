@@ -22,7 +22,7 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-    <link rel="stylesheet" href="/static/local.css" />
+    <link rel="stylesheet" href="/CGP/static/local.css" />
   </head>
   <body>
 
@@ -46,20 +46,20 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                  aria-expanded="false">Cadastros <span class="caret"></span></a>
               <ul class="dropdown-menu">
-                <li><a href="/campus/listar">Campus</a></li>
-                <li><a href="/setores/listar/">Setores</a></li>
-                <li><a href="/classenivel/listar/">Classes e Níveis</a></li>
-                <li><a href="/cargos/listar">Cargos</a></li>
-                <li><a href="/cdfg/listar">CD/FG</a></li>
+                <li><a href="/CGP/campus/listar">Campus</a></li>
+                <li><a href="/CGP/setores/listar/">Setores</a></li>
+                <li><a href="/CGP/classenivel/listar/">Classes e Níveis</a></li>
+                <li><a href="/CGP/cargos/listar">Cargos</a></li>
+                <li><a href="/CGP/cdfg/listar">CD/FG</a></li>
               </ul>
             </li>
               <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                  aria-expanded="false">Segurança <span class="caret"></span></a>
               <ul class="dropdown-menu">
-                <li><a href="/perfis/listar">Perfis</a></li>
-                <li><a href="/permissoes/listar">Permissões</a></li>
-                <li><a href="/logs/listar">Logs</a></li>
+                <li><a href="/CGP/perfis/listar">Perfis</a></li>
+                <li><a href="/CGP/permissoes/listar">Permissões</a></li>
+                <li><a href="/CGP/logs/listar">Logs</a></li>
               </ul>
             </li>
             <li class="dropdown">
@@ -73,8 +73,8 @@
             </li>
           </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li class="active"><a href="/pessoas/editar/{{ session["usuario_id"]  }}">{{ session["usuario_nome"]  }}</a></li>
-                <li><a href="/login/logout/">Sair</a></li>
+                <li class="active"><a href="/CGP/pessoas/editar/{{ session["usuario_id"]  }}">{{ session["usuario_nome"]  }}</a></li>
+                <li><a href="/CGP/login/logout/">Sair</a></li>
             </ul>
         </div><!--/.nav-collapse -->
       </div>
