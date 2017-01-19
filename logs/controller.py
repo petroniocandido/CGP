@@ -8,9 +8,9 @@ from wtforms import StringField, HiddenField, SelectField
 from wtforms.validators import DataRequired
 from wtforms_alchemy import ModelForm
 
-from ControllerBase import SalvarEntidade,RemoverEntidade, requer_autenticacao_autorizacao
+from CGP.ControllerBase import SalvarEntidade,RemoverEntidade, requer_autenticacao_autorizacao
 
-from DomainModel import Log, Pessoa
+from CGP.DomainModel import Log, Pessoa
 
 logs = Blueprint('logs', __name__)
 

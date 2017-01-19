@@ -9,8 +9,8 @@ from wtforms import StringField, HiddenField, SelectField, FormField, BooleanFie
 from wtforms.fields.html5 import DateField
 from wtforms.validators import DataRequired, Length, Optional
 
-from ControllerBase import SalvarEntidade, RemoverEntidade, logsAuditoria, requer_autenticacao_autorizacao
-from DomainModel import Pessoa, Progressao, ClasseNivel
+from CGP.ControllerBase import SalvarEntidade, RemoverEntidade, logsAuditoria, requer_autenticacao_autorizacao
+from CGP.DomainModel import Pessoa, Progressao, ClasseNivel
 
 progressoes = Blueprint('progressoes', __name__)
 

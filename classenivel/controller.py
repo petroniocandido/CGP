@@ -8,8 +8,8 @@ from wtforms import StringField, HiddenField, SelectField
 from wtforms.validators import DataRequired
 from wtforms_alchemy import ModelForm
 
-from ControllerBase import SalvarEntidade, RemoverEntidade, logsAuditoria, requer_autenticacao_autorizacao
-from DomainModel import ClasseNivel, TipoServidor
+from CGP.ControllerBase import SalvarEntidade, RemoverEntidade, logsAuditoria, requer_autenticacao_autorizacao
+from CGP.DomainModel import ClasseNivel, TipoServidor
 
 classenivel = Blueprint('classenivel', __name__)
 

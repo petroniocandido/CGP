@@ -8,9 +8,9 @@ from wtforms import StringField, HiddenField, SelectField
 from wtforms.validators import DataRequired
 from wtforms_alchemy import ModelForm
 
-from ControllerBase import SalvarEntidade,RemoverEntidade, logsAuditoria, SalvarEntidadeSimples, requer_autenticacao_autorizacao
+from CGP.ControllerBase import SalvarEntidade,RemoverEntidade, logsAuditoria, SalvarEntidadeSimples, requer_autenticacao_autorizacao
 
-from DomainModel import Perfil, Permissao
+from CGP.DomainModel import Perfil, Permissao
 
 perfis = Blueprint('perfis', __name__)
 
