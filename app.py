@@ -42,6 +42,6 @@ def home():
 if __name__ == '__main__':
 	app.run()
   
-url_for('static', filename='local.css')
+#url_for('static', filename='local.css')
 
 #app.run()
