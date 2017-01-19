@@ -37,10 +37,10 @@
 	<td>{{ obj.nome }}</td>
 	<td>{{ obj.matricula }}</td>
 	<td>{{ TS[ obj.tipoServidor ].value }}</td>
-	<td> <a href="/pessoas/editar/{{ obj.id }}">Editar</a> </td>
+	<td> <a href="/CGP/pessoas/editar/{{ obj.id }}">Editar</a> </td>
   </tr>
   {% endfor %}
 </tbody>
 </table>
-<a href="/pessoas/editar/0" class="btn btn-default btn-lg" role="button">Novo</a>
+<a href="./pessoas/editar/0" class="btn btn-default btn-lg" role="button">Novo</a>
 {% endblock %}
