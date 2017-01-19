@@ -7,8 +7,8 @@ from flask_wtf import Form
 from wtforms import StringField, HiddenField, SelectField, PasswordField
 from wtforms.validators import DataRequired
 
-from ControllerBase import usuarioLogado
-from DomainModel import TipoLog, Log, Pessoa, Salvar, Remover, appendLog
+from CGP.ControllerBase import usuarioLogado
+from CGP.DomainModel import TipoLog, Log, Pessoa, Salvar, Remover, appendLog
 
 login = Blueprint('login', __name__)
 
