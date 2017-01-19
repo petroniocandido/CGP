@@ -4,12 +4,14 @@
 from flask import flash,session, redirect, url_for, request
 from functools import wraps
 from CGP.DomainModel import db, Log, appendLog, TipoLog, Salvar, Remover, Pessoa
+from CGP.app import app
 
 
 def requer_autenticacao(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         if "usuario_id" not in session or session["usuario_id"] is None:
+            app.logger.warning("Usuário não autenticado")
             return redirect('login/login')
         session["ultima_url"] = request.path
         return f(*args, **kwargs)
@@ -20,9 +22,11 @@ def requer_autenticacao_autorizacao(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         if "usuario_id" not in session or session["usuario_id"] is None:
+            app.logger.warning("Usuário não autenticado")
             return redirect('login/login')
         tmppath = request.path[:request.path.rindex('/')+1]
         if tmppath not in usuarioPermissoes():
+            app.logger.warning("Usuário não autorizado")
             flash('Acesso não autorizado!','danger')
             return redirect(session["ultima_url"])
         session["ultima_url"] = request.path

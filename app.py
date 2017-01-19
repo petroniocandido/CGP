@@ -1,5 +1,6 @@
 from flask import Flask, redirect
 import logging
+from logging import Formatter
 
 import sys
 
@@ -8,9 +9,13 @@ sys.setdefaultencoding('utf-8')
 
 app = Flask(__name__)
 file_handler = logging.FileHandler(filename='flask.log')
-file_handler.setLevel(logging.NOTSET)
+file_handler.setFormatter(Formatter(
+    '%(asctime)s %(levelname)s: %(message)s '
+    '[in %(pathname)s:%(lineno)d]'
+))
 app.logger.addHandler(file_handler)
-app.logger.info("Iniciando")
+
+app.logger.warning("Iniciando")
 
 app.config['SECRET_KEY'] = "1!aA2@sS3#dD4$fF5%gG"
 

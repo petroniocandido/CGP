@@ -9,6 +9,7 @@ from wtforms.validators import DataRequired
 
 from CGP.ControllerBase import usuarioLogado
 from CGP.DomainModel import TipoLog, Log, Pessoa, Salvar, Remover, appendLog
+from CGP.app import app
 
 login = Blueprint('login', __name__)
 
@@ -25,6 +26,7 @@ def efetuarLogin():
         if form.validate():
             pessoa = Pessoa.query.filter(Pessoa.email_Institucional == form.login.data).first()
             if pessoa == None:
+                app.logger.warning("Login incorreto: " + form.login.data)
                 appendLog(TipoLog.ERRO, "Login incorreto: " + form.login.data, None)
                 flash('E-mail ou senha incorretos!', 'danger')
             else:
@@ -34,8 +36,11 @@ def efetuarLogin():
                     appendLog(TipoLog.SUCESSO,"Login bem sucedido",pessoa)
                     return redirect(url_for('pessoas.Listar'))
                 else:
+                    app.logger.warning("Senha incorreta: " + form.login.data)
                     appendLog(TipoLog.ERRO, "Senha incorreta: " + form.login.data, None)
                     flash('E-mail ou senha incorretos!', 'danger')
+        else:
+            app.logger.warning("Formulário inválido")
     else:
         form = LoginForm()
 
